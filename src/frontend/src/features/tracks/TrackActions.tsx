@@ -16,8 +16,8 @@ interface TrackActionsProps {
 }
 
 export function TrackActions({ track }: TrackActionsProps) {
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const isLiked = isFavorite(track.id);
+  const { favorites, toggleFavorite } = useFavorites();
+  const isLiked = favorites.includes(track.id);
 
   return (
     <div className="flex items-center gap-1">

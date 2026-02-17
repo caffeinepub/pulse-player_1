@@ -1,133 +1,50 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Modern, clean, minimal cross-platform (Android/iOS) Music & Video Player app with dark/light mode, smooth UX, local/offline media playback, playlists, search, video playback features, and advanced options like PiP, subtitles, recommendations, and sleep timer.",
+  "summary": "Build an app that is fully offline and independent (no required network dependencies).",
   "architectural_notes": [
-    "Choose one framework (Flutter or React Native) and build a single codebase targeting Android and iOS.",
-    "Use clean architecture with well-structured, commented code and performance/battery optimizations.",
-    "Support dark mode + light mode with a consistent minimal design system."
+    "App must run fully offline: no required server calls or third-party service dependencies at runtime."
   ],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Minimal geometric app logo mark, monochrome, rounded style (app-logo.dim_512x512.png)\n- Soft abstract gradient background, neutral palette, light and dark variants (hero-bg-light.dim_1440x900.png)\n- Soft abstract gradient background, neutral palette, light and dark variants (hero-bg-dark.dim_1440x900.png)\n- Minimal empty-state illustration of headphones and a play button, outline style (empty-library.dim_1200x800.png)\n- Minimal empty-state illustration of a film strip and play button, outline style (empty-video.dim_1200x800.png)",
   "existing_features": [
     {
-      "id": "feature-create-a-modern-clean-minimal-responsive-ui-shell-for-a-music-video-player-with-consistent-design-system-light-dark-themes-soft-neutral-palette-avoid-blue-purple-rounded-corners-large-clear-icons-readable-typography-smooth-transitions-and-a-bottom-navigation-layout-optimized-for-mobile-screens",
-      "title": "Create a modern, clean, minimal responsive UI shell for a Music & Video Player with consistent design system: light + dark themes, soft neutral palette (avoid blue/purple), rounded corners, large clear icons, readable typography, smooth transitions, and a bottom navigation layout optimized for mobile screens.",
+      "id": "feature-add-an-app-wide-offline-only-mode-that-ensures-no-internet-computer-canister-calls-no-internet-identity-login-flow-and-no-cloud-sync-export-attempts-occur-when-the-mode-is-enabled",
+      "title": "Add an app-wide \"Offline-only\" mode that ensures no Internet Computer canister calls, no Internet Identity login flow, and no cloud-sync/export attempts occur when the mode is enabled.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-implement-local-media-ingestion-for-audio-and-video-via-browser-safe-mechanisms-allow-user-to-add-select-local-files-file-picker-and-index-them-in-an-app-library-persist-library-metadata-locally-for-offline-availability-metadata-and-user-lists-without-requiring-uploads-to-the-backend",
-      "title": "Implement local media ingestion for audio and video via browser-safe mechanisms: allow user to add/select local files (file picker) and index them in an app library; persist library metadata locally for offline availability (metadata and user lists), without requiring uploads to the backend.",
+      "id": "feature-update-all-data-features-that-currently-do-optional-cloud-sync-favorites-history-playlists-profile-setup-and-settings-export-to-strictly-operate-on-local-indexeddb-data-while-offline-only-mode-is-enabled-without-showing-cloud-related-warnings-toasts",
+      "title": "Update all data features that currently do optional cloud sync (favorites, history, playlists, profile setup, and settings export) to strictly operate on local IndexedDB data while Offline-only mode is enabled, without showing cloud-related warnings/toasts.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-build-music-player-core-playback-ux-play-pause-next-previous-seek-shuffle-repeat-off-one-all-and-a-persistent-mini-player-bar-that-remains-available-while-navigating-between-tabs",
-      "title": "Build Music Player core playback UX: play/pause, next/previous, seek, shuffle, repeat (off/one/all), and a persistent mini-player bar that remains available while navigating between tabs.",
+      "id": "feature-make-the-application-load-and-remain-usable-with-the-browser-fully-offline-by-adding-offline-asset-caching-pwa-service-worker-for-the-built-frontend-assets-html-css-js-fonts-icons-so-the-app-shell-loads-without-any-network-connectivity",
+      "title": "Make the application load and remain usable with the browser fully offline by adding offline asset caching (PWA/service worker) for the built frontend assets (HTML/CSS/JS/fonts/icons) so the app shell loads without any network connectivity.",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-playlists-management-create-rename-delete-playlists-add-remove-tracks-play-a-playlist-as-a-queue-store-playlist-definitions-persistently",
-      "title": "Add playlists management: create, rename, delete playlists; add/remove tracks; play a playlist as a queue; store playlist definitions persistently.",
+      "id": "feature-revise-user-facing-copy-related-to-connectivity-so-it-matches-the-new-offline-first-behavior-e-g-the-offline-banner-and-settings-descriptions-and-is-consistent-with-offline-only-mode",
+      "title": "Revise user-facing copy related to connectivity so it matches the new offline-first behavior (e.g., the offline banner and Settings descriptions) and is consistent with Offline-only mode.",
       "reqIds": [
         "REQ-4"
       ],
       "version": 1
     },
     {
-      "id": "feature-implement-favorites-like-and-history-tracking-like-unlike-tracks-show-a-favorites-list-track-recently-played-and-recently-added-sections-and-persist-this-data-local-per-user-backend-when-signed-in",
-      "title": "Implement Favorites/Like and history tracking: like/unlike tracks, show a Favorites list, track Recently Played and Recently Added sections, and persist this data (local + per-user backend when signed in).",
+      "id": "feature-establish-and-apply-a-single-coherent-visual-theme-refresh-for-the-offline-first-product-colors-typography-spacing-component-styling-and-apply-it-consistently-across-the-main-pages-music-video-library-settings-without-adding-new-product-features",
+      "title": "Establish and apply a single coherent visual theme refresh for the offline-first product (colors, typography, spacing, component styling) and apply it consistently across the main pages (Music, Video, Library, Settings) without adding new product features.",
       "reqIds": [
         "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-library-search-and-sorting-search-by-song-name-artist-album-best-effort-based-on-available-metadata-and-sorting-by-name-size-and-date-for-both-audio-and-video-lists",
-      "title": "Add library search and sorting: search by song name/artist/album (best-effort based on available metadata), and sorting by name, size, and date for both audio and video lists.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-an-equalizer-using-the-web-audio-api-with-preset-modes-e-g-bass-boost-pop-rock-classical-jazz-and-an-off-mode-apply-eq-to-music-playback-only",
-      "title": "Implement an equalizer using the Web Audio API with preset modes (e.g., Bass Boost, Pop, Rock, Classical, Jazz) and an Off mode; apply EQ to music playback only.",
-      "reqIds": [
-        "REQ-7"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-build-video-player-with-local-video-playback-fullscreen-mode-playback-speed-control-0-5x-2x-subtitle-loading-e-g-vtt-and-picture-in-picture-where-supported-by-the-browser",
-      "title": "Build Video Player with local video playback, fullscreen mode, playback speed control (0.5x–2x), subtitle loading (e.g., .vtt), and Picture-in-Picture where supported by the browser.",
-      "reqIds": [
-        "REQ-8"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-mobile-friendly-gesture-controls-for-video-playback-swipe-gestures-to-adjust-volume-and-brightness-like-overlay-ui-level-brightness-simulation-with-clear-visual-feedback-and-a-way-to-disable-gestures-in-settings",
-      "title": "Add mobile-friendly gesture controls for video playback: swipe gestures to adjust volume and brightness-like overlay (UI-level brightness simulation), with clear visual feedback and a way to disable gestures in settings.",
-      "reqIds": [
-        "REQ-9"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-smooth-loading-states-and-performance-minded-ui-patterns-skeletons-spinners-for-library-indexing-virtualization-for-long-lists-and-ensure-fast-tab-switching-and-low-jank-on-mobile-browsers",
-      "title": "Add smooth loading states and performance-minded UI patterns: skeletons/spinners for library indexing, virtualization for long lists, and ensure fast tab switching and low jank on mobile browsers.",
-      "reqIds": [
-        "REQ-10"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-a-sleep-timer-that-stops-playback-after-a-user-selected-duration-e-g-5-10-15-30-60-minutes-with-countdown-display-and-cancel-option",
-      "title": "Implement a sleep timer that stops playback after a user-selected duration (e.g., 5/10/15/30/60 minutes) with countdown display and cancel option.",
-      "reqIds": [
-        "REQ-11"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-provide-basic-smart-recommendations-without-external-ai-llm-services-generate-recommendations-from-on-device-user-history-recently-played-favorites-most-played-similar-artist-album-when-metadata-exists",
-      "title": "Provide basic \"smart recommendations\" without external AI/LLM services: generate recommendations from on-device/user history (recently played, favorites, most played, similar artist/album when metadata exists).",
-      "reqIds": [
-        "REQ-12"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-authentication-and-per-user-cloud-sync-for-lightweight-data-only-playlists-favorites-history-settings-using-internet-identity-keep-media-files-local-only",
-      "title": "Add authentication and per-user cloud sync for lightweight data only (playlists, favorites, history, settings) using Internet Identity; keep media files local-only.",
-      "reqIds": [
-        "REQ-13"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-in-repo-documentation-deliverables-1-app-ui-wireframe-description-screens-key-interactions-2-folder-structure-overview-frontend-backend-3-basic-starter-code-entry-points-explanation-4-list-of-suggested-libraries-used-react-query-media-helpers-etc-and-5-future-improvement-ideas",
-      "title": "Create in-repo documentation deliverables: (1) app UI wireframe description (screens + key interactions), (2) folder structure overview (frontend/backend), (3) basic starter code entry points explanation, (4) list of suggested libraries used (React Query, media helpers, etc.), and (5) future improvement ideas.",
-      "reqIds": [
-        "REQ-15"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-generated-static-image-assets-for-branding-and-empty-states-and-render-them-in-the-ui-from-frontend-public-assets-generated",
-      "title": "Add generated static image assets for branding and empty states and render them in the UI from frontend/public/assets/generated.",
-      "reqIds": [
-        "REQ-16"
       ],
       "version": 1
     }
@@ -135,76 +52,8 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Design system & UI shell: minimal clean UI, dark/light themes, rounded corners, smooth animations, bottom navigation, large icons, readable typography",
+      "summary": "Make the app fully offline and independent (no required network connectivity or external services).",
       "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Music playback core: play/pause/next/previous, shuffle/repeat, background playback, lock screen controls",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Music library management: local/offline music access, search by song/artist/album, recently played, favorites/likes, recently added section",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Playlists: create and manage playlists",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "Equalizer: preset modes (Bass Boost, Pop, Rock, etc.)",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Video playback core: play local videos, support MP4/MKV/AVI, fullscreen, auto-rotate",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-7",
-      "summary": "Video controls: gesture controls (brightness/volume), playback speed (0.5x–2x), subtitles support, Picture-in-Picture mode",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-8",
-      "summary": "Media organization: file sorting by size/name/date",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-9",
-      "summary": "Advanced UX: smooth loading animations, sleep timer",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-10",
-      "summary": "Smart recommendations: AI-based suggestions from user history",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-11",
-      "summary": "Project scaffolding deliverables: choose Flutter or React Native, clean architecture setup, responsive Android/iOS, optimized performance/low battery, folder structure, starter code, suggested libraries/plugins, future improvements list",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-25",
-      "summary": "Implement a Motoko backend data model and APIs to store per-user: playlists, liked tracks (by stable local track identifier), playback history, and basic settings; include basic CRUD methods and query methods needed by the UI.",
-      "reqIds": [
-        "REQ-14"
-      ],
       "status": "pending"
     }
   ],

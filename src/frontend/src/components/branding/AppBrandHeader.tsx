@@ -9,18 +9,18 @@ export function AppBrandHeader() {
 
   return (
     <div 
-      className="relative h-48 bg-cover bg-center"
+      className="relative h-56 bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background" />
       <div className="relative h-full flex flex-col items-center justify-center px-4">
         <img 
           src="/assets/generated/app-logo.dim_512x512.png" 
           alt="Pulse Player" 
-          className="w-20 h-20 mb-3"
+          className="w-24 h-24 mb-4 drop-shadow-lg"
         />
-        <h1 className="text-3xl font-bold">Pulse Player</h1>
-        <p className="text-muted-foreground mt-1">Your music, your way</p>
+        <h1 className="text-4xl font-bold tracking-tight">Pulse Player</h1>
+        <p className="text-muted-foreground mt-2 text-lg">Your music, your way</p>
       </div>
     </div>
   );

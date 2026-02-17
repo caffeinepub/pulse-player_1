@@ -2,11 +2,99 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-modern-clean-minimal-responsive-ui-shell-for-a-music-video-player-with-consistent-design-system-light-dark-themes-soft-neutral-palette-avoid-blue-purple-rounded-corners-large-clear-icons-readable-typography-smooth-transitions-and-a-bottom-navigation-layout-optimized-for-mobile-screens",
-      "featureTitle": "Create a modern, clean, minimal responsive UI shell for a Music & Video Player with consistent design system: light + dark themes, soft neutral palette (avoid blue/purple), rounded corners, large clear icons, readable typography, smooth transitions, and a bottom navigation layout optimized for mobile screens.",
+      "featureId": "feature-add-an-app-wide-offline-only-mode-that-ensures-no-internet-computer-canister-calls-no-internet-identity-login-flow-and-no-cloud-sync-export-attempts-occur-when-the-mode-is-enabled",
+      "featureTitle": "Add an app-wide \"Offline-only\" mode that ensures no Internet Computer canister calls, no Internet Identity login flow, and no cloud-sync/export attempts occur when the mode is enabled.",
       "files": [
-        "frontend/src/App.tsx",
         "frontend/src/app/layout/AppShell.tsx",
+        "frontend/src/app/offline/offlineOnlyMode.ts",
+        "frontend/src/app/offline/useOfflineOnlyMode.ts",
+        "frontend/src/pages/SettingsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-all-data-features-that-currently-do-optional-cloud-sync-favorites-history-playlists-profile-setup-and-settings-export-to-strictly-operate-on-local-indexeddb-data-while-offline-only-mode-is-enabled-without-showing-cloud-related-warnings-toasts",
+      "featureTitle": "Update all data features that currently do optional cloud sync (favorites, history, playlists, profile setup, and settings export) to strictly operate on local IndexedDB data while Offline-only mode is enabled, without showing cloud-related warnings/toasts.",
+      "files": [
+        "frontend/src/features/auth/ProfileSetupDialog.tsx",
+        "frontend/src/features/auth/useCurrentUserProfile.ts",
+        "frontend/src/features/favorites/useFavorites.ts",
+        "frontend/src/features/history/useHistory.ts",
+        "frontend/src/features/playlists/usePlaylists.ts",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/SettingsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-make-the-application-load-and-remain-usable-with-the-browser-fully-offline-by-adding-offline-asset-caching-pwa-service-worker-for-the-built-frontend-assets-html-css-js-fonts-icons-so-the-app-shell-loads-without-any-network-connectivity",
+      "featureTitle": "Make the application load and remain usable with the browser fully offline by adding offline asset caching (PWA/service worker) for the built frontend assets (HTML/CSS/JS/fonts/icons) so the app shell loads without any network connectivity.",
+      "files": [
+        "frontend/index.html",
+        "frontend/public/manifest.webmanifest",
+        "frontend/public/sw.js",
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-revise-user-facing-copy-related-to-connectivity-so-it-matches-the-new-offline-first-behavior-e-g-the-offline-banner-and-settings-descriptions-and-is-consistent-with-offline-only-mode",
+      "featureTitle": "Revise user-facing copy related to connectivity so it matches the new offline-first behavior (e.g., the offline banner and Settings descriptions) and is consistent with Offline-only mode.",
+      "files": [
+        "frontend/src/app/layout/AppShell.tsx",
+        "frontend/src/pages/SettingsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-establish-and-apply-a-single-coherent-visual-theme-refresh-for-the-offline-first-product-colors-typography-spacing-component-styling-and-apply-it-consistently-across-the-main-pages-music-video-library-settings-without-adding-new-product-features",
+      "featureTitle": "Establish and apply a single coherent visual theme refresh for the offline-first product (colors, typography, spacing, component styling) and apply it consistently across the main pages (Music, Video, Library, Settings) without adding new product features.",
+      "files": [
+        "frontend/src/components/branding/AppBrandHeader.tsx",
         "frontend/src/components/navigation/BottomNav.tsx",
         "frontend/src/index.css",
         "frontend/src/pages/LibraryPage.tsx",
@@ -24,326 +112,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-local-media-ingestion-for-audio-and-video-via-browser-safe-mechanisms-allow-user-to-add-select-local-files-file-picker-and-index-them-in-an-app-library-persist-library-metadata-locally-for-offline-availability-metadata-and-user-lists-without-requiring-uploads-to-the-backend",
-      "featureTitle": "Implement local media ingestion for audio and video via browser-safe mechanisms: allow user to add/select local files (file picker) and index them in an app library; persist library metadata locally for offline availability (metadata and user lists), without requiring uploads to the backend.",
-      "files": [
-        "frontend/src/app/layout/AppShell.tsx",
-        "frontend/src/app/offline/useOfflineStatus.ts",
-        "frontend/src/features/library/AddLocalMediaButton.tsx",
-        "frontend/src/features/library/LocalMediaNotice.tsx",
-        "frontend/src/features/library/useLibrary.ts",
-        "frontend/src/lib/media/metadata.ts",
-        "frontend/src/lib/storage/indexedDb.ts",
-        "frontend/src/pages/LibraryPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-music-player-core-playback-ux-play-pause-next-previous-seek-shuffle-repeat-off-one-all-and-a-persistent-mini-player-bar-that-remains-available-while-navigating-between-tabs",
-      "featureTitle": "Build Music Player core playback UX: play/pause, next/previous, seek, shuffle, repeat (off/one/all), and a persistent mini-player bar that remains available while navigating between tabs.",
-      "files": [
-        "frontend/src/app/layout/AppShell.tsx",
-        "frontend/src/features/player/FullPlayerSheet.tsx",
-        "frontend/src/features/player/MiniPlayerBar.tsx",
-        "frontend/src/features/player/PlayerProvider.tsx",
-        "frontend/src/features/player/audio/AudioEngine.ts",
-        "frontend/src/pages/LibraryPage.tsx",
-        "frontend/src/pages/MusicPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-playlists-management-create-rename-delete-playlists-add-remove-tracks-play-a-playlist-as-a-queue-store-playlist-definitions-persistently",
-      "featureTitle": "Add playlists management: create, rename, delete playlists; add/remove tracks; play a playlist as a queue; store playlist definitions persistently.",
-      "files": [
-        "frontend/src/features/playlists/AddToPlaylistMenu.tsx",
-        "frontend/src/features/playlists/PlaylistDetail.tsx",
-        "frontend/src/features/playlists/PlaylistsPanel.tsx",
-        "frontend/src/features/playlists/usePlaylists.ts",
-        "frontend/src/pages/LibraryPage.tsx",
-        "frontend/src/pages/MusicPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-favorites-like-and-history-tracking-like-unlike-tracks-show-a-favorites-list-track-recently-played-and-recently-added-sections-and-persist-this-data-local-per-user-backend-when-signed-in",
-      "featureTitle": "Implement Favorites/Like and history tracking: like/unlike tracks, show a Favorites list, track Recently Played and Recently Added sections, and persist this data (local + per-user backend when signed in).",
-      "files": [
-        "frontend/src/features/favorites/useFavorites.ts",
-        "frontend/src/features/history/useHistory.ts",
-        "frontend/src/features/player/PlayerProvider.tsx",
-        "frontend/src/features/tracks/TrackActions.tsx",
-        "frontend/src/pages/LibraryPage.tsx",
-        "frontend/src/pages/MusicPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
         "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-library-search-and-sorting-search-by-song-name-artist-album-best-effort-based-on-available-metadata-and-sorting-by-name-size-and-date-for-both-audio-and-video-lists",
-      "featureTitle": "Add library search and sorting: search by song name/artist/album (best-effort based on available metadata), and sorting by name, size, and date for both audio and video lists.",
-      "files": [
-        "frontend/src/features/library/LibrarySearchSortBar.tsx",
-        "frontend/src/features/library/searchSort.ts",
-        "frontend/src/pages/LibraryPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-an-equalizer-using-the-web-audio-api-with-preset-modes-e-g-bass-boost-pop-rock-classical-jazz-and-an-off-mode-apply-eq-to-music-playback-only",
-      "featureTitle": "Implement an equalizer using the Web Audio API with preset modes (e.g., Bass Boost, Pop, Rock, Classical, Jazz) and an Off mode; apply EQ to music playback only.",
-      "files": [
-        "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
-        "frontend/src/features/equalizer/presets.ts",
-        "frontend/src/features/player/audio/AudioEngine.ts",
-        "frontend/src/pages/SettingsPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-7"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-video-player-with-local-video-playback-fullscreen-mode-playback-speed-control-0-5x-2x-subtitle-loading-e-g-vtt-and-picture-in-picture-where-supported-by-the-browser",
-      "featureTitle": "Build Video Player with local video playback, fullscreen mode, playback speed control (0.5x–2x), subtitle loading (e.g., .vtt), and Picture-in-Picture where supported by the browser.",
-      "files": [
-        "frontend/src/app/layout/AppShell.tsx",
-        "frontend/src/features/video/VideoPlayerView.tsx",
-        "frontend/src/pages/VideoPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-8"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-mobile-friendly-gesture-controls-for-video-playback-swipe-gestures-to-adjust-volume-and-brightness-like-overlay-ui-level-brightness-simulation-with-clear-visual-feedback-and-a-way-to-disable-gestures-in-settings",
-      "featureTitle": "Add mobile-friendly gesture controls for video playback: swipe gestures to adjust volume and brightness-like overlay (UI-level brightness simulation), with clear visual feedback and a way to disable gestures in settings.",
-      "files": [
-        "frontend/src/features/settings/PlaybackSettingsCard.tsx",
-        "frontend/src/features/settings/usePlayerSettings.ts",
-        "frontend/src/features/video/VideoPlayerView.tsx",
-        "frontend/src/pages/SettingsPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-9"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-smooth-loading-states-and-performance-minded-ui-patterns-skeletons-spinners-for-library-indexing-virtualization-for-long-lists-and-ensure-fast-tab-switching-and-low-jank-on-mobile-browsers",
-      "featureTitle": "Add smooth loading states and performance-minded UI patterns: skeletons/spinners for library indexing, virtualization for long lists, and ensure fast tab switching and low jank on mobile browsers.",
-      "files": [
-        "frontend/src/app/layout/AppShell.tsx",
-        "frontend/src/components/loading/IndexingSkeleton.tsx",
-        "frontend/src/pages/LibraryPage.tsx",
-        "frontend/src/pages/MusicPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-10"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-a-sleep-timer-that-stops-playback-after-a-user-selected-duration-e-g-5-10-15-30-60-minutes-with-countdown-display-and-cancel-option",
-      "featureTitle": "Implement a sleep timer that stops playback after a user-selected duration (e.g., 5/10/15/30/60 minutes) with countdown display and cancel option.",
-      "files": [
-        "frontend/src/features/player/FullPlayerSheet.tsx",
-        "frontend/src/features/sleep-timer/SleepTimerControl.tsx",
-        "frontend/src/features/sleep-timer/useSleepTimer.ts",
-        "frontend/src/pages/SettingsPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-11"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-basic-smart-recommendations-without-external-ai-llm-services-generate-recommendations-from-on-device-user-history-recently-played-favorites-most-played-similar-artist-album-when-metadata-exists",
-      "featureTitle": "Provide basic \"smart recommendations\" without external AI/LLM services: generate recommendations from on-device/user history (recently played, favorites, most played, similar artist/album when metadata exists).",
-      "files": [
-        "frontend/src/features/recommendations/RecommendationsSection.tsx",
-        "frontend/src/features/recommendations/recommendationLogic.ts",
-        "frontend/src/features/recommendations/useRecommendations.ts",
-        "frontend/src/pages/MusicPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-12"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-authentication-and-per-user-cloud-sync-for-lightweight-data-only-playlists-favorites-history-settings-using-internet-identity-keep-media-files-local-only",
-      "featureTitle": "Add authentication and per-user cloud sync for lightweight data only (playlists, favorites, history, settings) using Internet Identity; keep media files local-only.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/features/auth/LoginButton.tsx",
-        "frontend/src/features/auth/ProfileSetupDialog.tsx",
-        "frontend/src/features/auth/useCurrentUserProfile.ts",
-        "frontend/src/pages/SettingsPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-13"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-create-in-repo-documentation-deliverables-1-app-ui-wireframe-description-screens-key-interactions-2-folder-structure-overview-frontend-backend-3-basic-starter-code-entry-points-explanation-4-list-of-suggested-libraries-used-react-query-media-helpers-etc-and-5-future-improvement-ideas",
-      "featureTitle": "Create in-repo documentation deliverables: (1) app UI wireframe description (screens + key interactions), (2) folder structure overview (frontend/backend), (3) basic starter code entry points explanation, (4) list of suggested libraries used (React Query, media helpers, etc.), and (5) future improvement ideas.",
-      "files": [
-        "frontend/docs/pulse-player.md"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-15"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-generated-static-image-assets-for-branding-and-empty-states-and-render-them-in-the-ui-from-frontend-public-assets-generated",
-      "featureTitle": "Add generated static image assets for branding and empty states and render them in the UI from frontend/public/assets/generated.",
-      "files": [
-        "frontend/src/app/layout/AppShell.tsx",
-        "frontend/src/components/branding/AppBrandHeader.tsx",
-        "frontend/src/features/library/EmptyLibraryState.tsx",
-        "frontend/src/features/recommendations/EmptyRecommendationsState.tsx",
-        "frontend/src/features/recommendations/RecommendationsSection.tsx",
-        "frontend/src/features/video/EmptyVideoState.tsx",
-        "frontend/src/pages/LibraryPage.tsx",
-        "frontend/src/pages/VideoPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-16"
       ],
       "confidence": "high"
     }

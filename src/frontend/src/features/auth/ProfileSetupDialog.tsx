@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useCurrentUserProfile } from './useCurrentUserProfile';
 import { useActor } from '@/hooks/useActor';
+import { useOfflineOnlyMode } from '@/app/offline/useOfflineOnlyMode';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,11 +13,12 @@ export function ProfileSetupDialog() {
   const { identity } = useInternetIdentity();
   const { data: userProfile, isLoading: profileLoading, isFetched } = useCurrentUserProfile();
   const { actor } = useActor();
+  const { offlineOnly } = useOfflineOnlyMode();
   const [name, setName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   const isAuthenticated = !!identity;
-  const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
+  const showProfileSetup = isAuthenticated && !offlineOnly && !profileLoading && isFetched && userProfile === null;
 
   const handleSave = async () => {
     if (!name.trim() || !actor) return;

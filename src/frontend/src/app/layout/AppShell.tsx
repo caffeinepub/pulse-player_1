@@ -8,24 +8,31 @@ import { LibraryPage } from '@/pages/LibraryPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { ProfileSetupDialog } from '@/features/auth/ProfileSetupDialog';
 import { useOfflineStatus } from '../offline/useOfflineStatus';
-import { WifiOff } from 'lucide-react';
+import { useOfflineOnlyMode } from '../offline/useOfflineOnlyMode';
+import { WifiOff, CloudOff } from 'lucide-react';
 
 type Tab = 'music' | 'video' | 'library' | 'settings';
 
 export function AppShell() {
   const [activeTab, setActiveTab] = useState<Tab>('music');
   const { isOffline } = useOfflineStatus();
+  const { offlineOnly } = useOfflineOnlyMode();
 
   return (
     <div className="flex flex-col h-screen bg-background">
       <ProfileSetupDialog />
       
-      {isOffline && (
-        <div className="bg-muted/50 border-b border-border px-4 py-2 flex items-center gap-2 text-sm text-muted-foreground">
-          <WifiOff className="w-4 h-4" />
-          <span>You're offline. Some features may be limited.</span>
+      {offlineOnly ? (
+        <div className="bg-accent/80 border-b border-border px-4 py-2.5 flex items-center gap-2 text-sm">
+          <CloudOff className="w-4 h-4 text-foreground" />
+          <span className="text-foreground font-medium">Running in local-only mode</span>
         </div>
-      )}
+      ) : isOffline ? (
+        <div className="bg-muted/50 border-b border-border px-4 py-2.5 flex items-center gap-2 text-sm text-muted-foreground">
+          <WifiOff className="w-4 h-4" />
+          <span>You're offline. Cloud features unavailable.</span>
+        </div>
+      ) : null}
 
       <main className="flex-1 overflow-y-auto pb-32">
         {activeTab === 'music' && <MusicPage />}

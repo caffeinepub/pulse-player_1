@@ -30,45 +30,45 @@ export function MusicPage() {
         <RecommendationsSection />
 
         <section>
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Disc3 className="w-5 h-5" />
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Disc3 className="w-5 h-5 text-primary" />
             Your Playlists
           </h2>
           <PlaylistsPanel />
         </section>
 
         <Tabs defaultValue="recent" className="w-full">
-          <TabsList className="w-full grid grid-cols-2">
-            <TabsTrigger value="recent" className="flex items-center gap-2">
+          <TabsList className="w-full grid grid-cols-2 h-11">
+            <TabsTrigger value="recent" className="flex items-center gap-2 font-medium">
               <Clock className="w-4 h-4" />
               Recently Played
             </TabsTrigger>
-            <TabsTrigger value="favorites" className="flex items-center gap-2">
+            <TabsTrigger value="favorites" className="flex items-center gap-2 font-medium">
               <Heart className="w-4 h-4" />
               Favorites
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="recent" className="mt-4">
+          <TabsContent value="recent" className="mt-6">
             {recentTracks.length > 0 ? (
               <TrackList tracks={recentTracks} context="recently-played" />
             ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No recently played tracks yet</p>
-                <p className="text-sm mt-1">Start listening to see your history here</p>
+              <div className="text-center py-16 text-muted-foreground">
+                <Clock className="w-14 h-14 mx-auto mb-4 opacity-40" />
+                <p className="text-lg font-medium">No recently played tracks yet</p>
+                <p className="text-sm mt-2">Start listening to see your history here</p>
               </div>
             )}
           </TabsContent>
           
-          <TabsContent value="favorites" className="mt-4">
+          <TabsContent value="favorites" className="mt-6">
             {favoriteTracks.length > 0 ? (
               <TrackList tracks={favoriteTracks} context="favorites" />
             ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Heart className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No favorite tracks yet</p>
-                <p className="text-sm mt-1">Like tracks to see them here</p>
+              <div className="text-center py-16 text-muted-foreground">
+                <Heart className="w-14 h-14 mx-auto mb-4 opacity-40" />
+                <p className="text-lg font-medium">No favorite tracks yet</p>
+                <p className="text-sm mt-2">Like tracks to see them here</p>
               </div>
             )}
           </TabsContent>

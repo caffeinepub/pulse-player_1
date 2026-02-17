@@ -10,6 +10,17 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface CloudData {
+  'playlists' : Array<[string, PlaylistData]>,
+  'favorites' : Array<string>,
+  'history' : Array<string>,
+  'profile' : [] | [UserProfile],
+}
+export interface PlaylistData {
+  'owner' : Principal,
+  'tracks' : Array<Track>,
+  'name' : string,
+}
 export interface Track {
   'id' : string,
   'title' : string,
@@ -28,6 +39,7 @@ export interface _SERVICE {
   'clearHistory' : ActorMethod<[], undefined>,
   'createPlaylist' : ActorMethod<[string], undefined>,
   'deletePlaylist' : ActorMethod<[string], undefined>,
+  'exportCloudData' : ActorMethod<[], CloudData>,
   'getAllPlaylists' : ActorMethod<[], Array<string>>,
   'getAllUsers' : ActorMethod<[], Array<Principal>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,

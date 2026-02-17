@@ -7,11 +7,22 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export interface PlaylistData {
+    owner: Principal;
+    tracks: Array<Track>;
+    name: string;
+}
 export interface Track {
     id: string;
     title: string;
     album: string;
     artist: string;
+}
+export interface CloudData {
+    playlists: Array<[string, PlaylistData]>;
+    favorites: Array<string>;
+    history: Array<string>;
+    profile?: UserProfile;
 }
 export interface UserProfile {
     name: string;
@@ -29,6 +40,7 @@ export interface backendInterface {
     clearHistory(): Promise<void>;
     createPlaylist(name: string): Promise<void>;
     deletePlaylist(name: string): Promise<void>;
+    exportCloudData(): Promise<CloudData>;
     getAllPlaylists(): Promise<Array<string>>;
     getAllUsers(): Promise<Array<Principal>>;
     getCallerUserProfile(): Promise<UserProfile | null>;

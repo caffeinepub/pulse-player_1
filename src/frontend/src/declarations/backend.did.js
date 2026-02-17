@@ -19,9 +19,20 @@ export const UserRole = IDL.Variant({
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const PlaylistData = IDL.Record({
+  'owner' : IDL.Principal,
+  'tracks' : IDL.Vec(Track),
+  'name' : IDL.Text,
+});
 export const UserProfile = IDL.Record({
   'name' : IDL.Text,
   'email' : IDL.Opt(IDL.Text),
+});
+export const CloudData = IDL.Record({
+  'playlists' : IDL.Vec(IDL.Tuple(IDL.Text, PlaylistData)),
+  'favorites' : IDL.Vec(IDL.Text),
+  'history' : IDL.Vec(IDL.Text),
+  'profile' : IDL.Opt(UserProfile),
 });
 
 export const idlService = IDL.Service({
@@ -32,6 +43,7 @@ export const idlService = IDL.Service({
   'clearHistory' : IDL.Func([], [], []),
   'createPlaylist' : IDL.Func([IDL.Text], [], []),
   'deletePlaylist' : IDL.Func([IDL.Text], [], []),
+  'exportCloudData' : IDL.Func([], [CloudData], []),
   'getAllPlaylists' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
   'getAllUsers' : IDL.Func([], [IDL.Vec(IDL.Principal)], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
@@ -65,9 +77,20 @@ export const idlFactory = ({ IDL }) => {
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
+  const PlaylistData = IDL.Record({
+    'owner' : IDL.Principal,
+    'tracks' : IDL.Vec(Track),
+    'name' : IDL.Text,
+  });
   const UserProfile = IDL.Record({
     'name' : IDL.Text,
     'email' : IDL.Opt(IDL.Text),
+  });
+  const CloudData = IDL.Record({
+    'playlists' : IDL.Vec(IDL.Tuple(IDL.Text, PlaylistData)),
+    'favorites' : IDL.Vec(IDL.Text),
+    'history' : IDL.Vec(IDL.Text),
+    'profile' : IDL.Opt(UserProfile),
   });
   
   return IDL.Service({
@@ -78,6 +101,7 @@ export const idlFactory = ({ IDL }) => {
     'clearHistory' : IDL.Func([], [], []),
     'createPlaylist' : IDL.Func([IDL.Text], [], []),
     'deletePlaylist' : IDL.Func([IDL.Text], [], []),
+    'exportCloudData' : IDL.Func([], [CloudData], []),
     'getAllPlaylists' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getAllUsers' : IDL.Func([], [IDL.Vec(IDL.Principal)], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),

@@ -1,8 +1,8 @@
 import Array "mo:core/Array";
 import Map "mo:core/Map";
 import Text "mo:core/Text";
-import Runtime "mo:core/Runtime";
 import Iter "mo:core/Iter";
+import Runtime "mo:core/Runtime";
 import Principal "mo:core/Principal";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
@@ -27,6 +27,13 @@ actor {
     name : Text;
     tracks : [Track];
     owner : Principal;
+  };
+
+  public type CloudData = {
+    profile : ?UserProfile;
+    playlists : [(Text, PlaylistData)];
+    favorites : [Text];
+    history : [Text];
   };
 
   let userPlaylists = Map.empty<Principal, Map.Map<Text, PlaylistData>>();
@@ -304,5 +311,37 @@ actor {
 
     let users = userProfiles.keys();
     users.toArray();
+  };
+
+  public shared ({ caller }) func exportCloudData() : async CloudData {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can export cloud data");
+    };
+
+    let playlists = switch (userPlaylists.get(caller)) {
+      case (?playlists) {
+        playlists.toArray();
+      };
+      case (null) { [] };
+    };
+
+    let favorites = switch (favoritesStorage.get(caller)) {
+      case (?favs) { favs };
+      case (null) { [] };
+    };
+
+    let history = switch (playbackHistory.get(caller)) {
+      case (?hist) { hist };
+      case (null) { [] };
+    };
+
+    let profile = userProfiles.get(caller);
+
+    {
+      profile;
+      playlists;
+      favorites;
+      history;
+    };
   };
 };

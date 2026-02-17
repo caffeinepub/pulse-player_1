@@ -1,0 +1,18 @@
+{
+  "name": "Pulse Player",
+  "short_name": "Pulse",
+  "description": "Your music, your way - offline-first media player",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/generated/app-logo.dim_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

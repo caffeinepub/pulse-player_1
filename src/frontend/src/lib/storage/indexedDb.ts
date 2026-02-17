@@ -19,6 +19,14 @@ export interface PlaylistLocal {
   updatedAt: number;
 }
 
+export interface LocalExportData {
+  tracks: MediaTrack[];
+  playlists: PlaylistLocal[];
+  favorites: Array<{ id: string; timestamp: number }>;
+  history: Array<{ id: string; timestamp: number }>;
+  settings: Record<string, any>;
+}
+
 const DB_NAME = 'pulse-player-db';
 const DB_VERSION = 1;
 
@@ -251,5 +259,56 @@ export const db = {
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
+  },
+
+  async getAllSettings(): Promise<Record<string, any>> {
+    const database = await getDB();
+    return new Promise((resolve, reject) => {
+      const transaction = database.transaction(['settings'], 'readonly');
+      const store = transaction.objectStore('settings');
+      const request = store.openCursor();
+      const settings: Record<string, any> = {};
+
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          settings[cursor.key as string] = cursor.value;
+          cursor.continue();
+        } else {
+          resolve(settings);
+        }
+      };
+      request.onerror = () => reject(request.error);
+    });
+  },
+
+  async exportAllData(): Promise<LocalExportData> {
+    const [tracks, playlists, favorites, history, settings] = await Promise.all([
+      this.getAllTracks(),
+      this.getAllPlaylists(),
+      this.getAllFavorites(),
+      this.getAllHistory(),
+      this.getAllSettings(),
+    ]);
+
+    // Remove non-serializable properties (fileHandle, objectUrl)
+    const sanitizedTracks = tracks.map(track => ({
+      id: track.id,
+      title: track.title,
+      artist: track.artist,
+      album: track.album,
+      type: track.type,
+      size: track.size,
+      duration: track.duration,
+      addedDate: track.addedDate,
+    }));
+
+    return {
+      tracks: sanitizedTracks,
+      playlists,
+      favorites,
+      history,
+      settings,
+    };
   },
 };

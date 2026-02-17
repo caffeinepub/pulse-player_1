@@ -24,7 +24,8 @@ export function AddToPlaylistMenu({ track }: AddToPlaylistMenuProps) {
       {playlists.map((playlist) => (
         <DropdownMenuItem
           key={playlist.id}
-          onClick={() => addTrackToPlaylist(playlist.id, track.id, {
+          onClick={() => addTrackToPlaylist(playlist.id, {
+            id: track.id,
             title: track.title,
             artist: track.artist,
             album: track.album,

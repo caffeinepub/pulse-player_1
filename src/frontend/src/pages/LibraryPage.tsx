@@ -51,37 +51,37 @@ export function LibraryPage() {
       />
 
       <Tabs defaultValue="audio" className="mt-6">
-        <TabsList className="w-full grid grid-cols-2">
-          <TabsTrigger value="audio" className="flex items-center gap-2">
+        <TabsList className="w-full grid grid-cols-2 h-11">
+          <TabsTrigger value="audio" className="flex items-center gap-2 font-medium">
             <Music className="w-4 h-4" />
             Audio ({filteredAudio.length})
           </TabsTrigger>
-          <TabsTrigger value="video" className="flex items-center gap-2">
+          <TabsTrigger value="video" className="flex items-center gap-2 font-medium">
             <Video className="w-4 h-4" />
             Video ({filteredVideo.length})
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="audio" className="mt-4">
+        <TabsContent value="audio" className="mt-6">
           {filteredAudio.length > 0 ? (
             <TrackList tracks={filteredAudio} context="library" />
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              <Music className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No audio files found</p>
+            <div className="text-center py-16 text-muted-foreground">
+              <Music className="w-14 h-14 mx-auto mb-4 opacity-40" />
+              <p className="text-lg font-medium">No audio files found</p>
             </div>
           )}
         </TabsContent>
 
-        <TabsContent value="video" className="mt-4">
+        <TabsContent value="video" className="mt-6">
           {filteredVideo.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {filteredVideo.map((video) => (
                 <div
                   key={video.id}
-                  className="p-4 bg-card rounded-xl border border-border"
+                  className="p-4 bg-card rounded-xl border border-border hover:bg-accent/50 transition-colors"
                 >
-                  <h3 className="font-medium">{video.title}</h3>
+                  <h3 className="font-semibold">{video.title}</h3>
                   <p className="text-sm text-muted-foreground mt-1">
                     {(video.size / 1024 / 1024).toFixed(1)} MB
                   </p>
@@ -89,9 +89,9 @@ export function LibraryPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              <Video className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No video files found</p>
+            <div className="text-center py-16 text-muted-foreground">
+              <Video className="w-14 h-14 mx-auto mb-4 opacity-40" />
+              <p className="text-lg font-medium">No video files found</p>
             </div>
           )}
         </TabsContent>

@@ -1,60 +1,53 @@
-import { useState } from 'react';
 import { useLibrary } from '@/features/library/useLibrary';
-import { VideoPlayerView } from '@/features/video/VideoPlayerView';
-import { EmptyVideoState } from '@/features/video/EmptyVideoState';
-import { Play, Clock } from 'lucide-react';
-import { formatFileSize, formatDuration } from '@/lib/media-utils';
+import { Video, FileVideo } from 'lucide-react';
 
 export function VideoPage() {
   const { videoTracks } = useLibrary();
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
-
-  if (selectedVideo) {
-    const video = videoTracks.find(v => v.id === selectedVideo);
-    if (video) {
-      return (
-        <VideoPlayerView
-          video={video}
-          onClose={() => setSelectedVideo(null)}
-        />
-      );
-    }
-  }
-
-  if (videoTracks.length === 0) {
-    return <EmptyVideoState />;
-  }
 
   return (
     <div className="px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Videos</h1>
-      
-      <div className="grid grid-cols-1 gap-3">
-        {videoTracks.map((video) => (
-          <button
-            key={video.id}
-            onClick={() => setSelectedVideo(video.id)}
-            className="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:bg-accent transition-colors text-left"
-          >
-            <div className="w-20 h-20 bg-muted rounded-lg flex items-center justify-center shrink-0">
-              <Play className="w-8 h-8 text-muted-foreground" />
-            </div>
-            
-            <div className="flex-1 min-w-0">
-              <h3 className="font-medium truncate">{video.title}</h3>
-              <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
-                {video.duration && (
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {formatDuration(video.duration)}
-                  </span>
-                )}
-                <span>{formatFileSize(video.size)}</span>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold flex items-center gap-2">
+          <Video className="w-6 h-6 text-primary" />
+          Videos
+        </h1>
+        <p className="text-muted-foreground mt-1">
+          {videoTracks.length} {videoTracks.length === 1 ? 'video' : 'videos'}
+        </p>
+      </div>
+
+      {videoTracks.length > 0 ? (
+        <div className="space-y-3">
+          {videoTracks.map((video) => (
+            <div
+              key={video.id}
+              className="p-4 bg-card rounded-xl border border-border hover:bg-accent/50 transition-colors"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                  <FileVideo className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold truncate">{video.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {(video.size / 1024 / 1024).toFixed(1)} MB
+                  </p>
+                </div>
               </div>
             </div>
-          </button>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-accent flex items-center justify-center">
+            <Video className="w-10 h-10 text-muted-foreground opacity-50" />
+          </div>
+          <p className="text-lg font-medium text-muted-foreground">No videos yet</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Add video files from your Library
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,127 +2,140 @@ import { useState, useEffect } from 'react';
 import { db, type PlaylistLocal } from '@/lib/storage/indexedDb';
 import { useActor } from '@/hooks/useActor';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useOfflineOnlyMode } from '@/app/offline/useOfflineOnlyMode';
 import type { Track } from '@/backend';
-import { toast } from 'sonner';
 
 export function usePlaylists() {
   const [playlists, setPlaylists] = useState<PlaylistLocal[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { actor } = useActor();
   const { identity } = useInternetIdentity();
+  const { offlineOnly } = useOfflineOnlyMode();
 
   useEffect(() => {
     loadPlaylists();
-  }, [actor, identity]);
+  }, []);
 
-  async function loadPlaylists() {
+  const loadPlaylists = async () => {
     try {
       const localPlaylists = await db.getAllPlaylists();
-      
-      if (actor && identity) {
-        try {
-          const cloudPlaylistNames = await actor.getAllPlaylists();
-          setPlaylists(localPlaylists);
-        } catch (error) {
-          console.warn('Could not sync playlists from cloud:', error);
-          setPlaylists(localPlaylists);
-        }
-      } else {
-        setPlaylists(localPlaylists);
-      }
+      setPlaylists(localPlaylists);
     } catch (error) {
       console.error('Failed to load playlists:', error);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
-  async function createPlaylist(name: string) {
+  const createPlaylist = async (name: string) => {
+    const newPlaylist: PlaylistLocal = {
+      id: `playlist-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      name,
+      trackIds: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
     try {
-      const newPlaylist: PlaylistLocal = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        name,
-        trackIds: [],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-      
       await db.addPlaylist(newPlaylist);
       setPlaylists(prev => [...prev, newPlaylist]);
-      
-      if (actor && identity) {
+
+      // Sync to cloud only if not in offline-only mode and authenticated
+      if (!offlineOnly && actor && identity) {
         try {
           await actor.createPlaylist(name);
         } catch (error) {
-          console.warn('Could not sync playlist to cloud:', error);
+          console.error('Cloud sync failed (create playlist):', error);
         }
       }
-      
-      toast.success(`Created playlist "${name}"`);
     } catch (error) {
       console.error('Failed to create playlist:', error);
-      toast.error('Failed to create playlist');
+      throw error;
     }
-  }
+  };
 
-  async function deletePlaylist(id: string) {
+  const deletePlaylist = async (id: string) => {
     try {
       const playlist = playlists.find(p => p.id === id);
       await db.deletePlaylist(id);
       setPlaylists(prev => prev.filter(p => p.id !== id));
-      
-      if (actor && identity && playlist) {
+
+      // Sync to cloud only if not in offline-only mode and authenticated
+      if (!offlineOnly && actor && identity && playlist) {
         try {
           await actor.deletePlaylist(playlist.name);
         } catch (error) {
-          console.warn('Could not delete playlist from cloud:', error);
+          console.error('Cloud sync failed (delete playlist):', error);
         }
       }
-      
-      toast.success('Playlist deleted');
     } catch (error) {
       console.error('Failed to delete playlist:', error);
-      toast.error('Failed to delete playlist');
+      throw error;
     }
-  }
+  };
 
-  async function addTrackToPlaylist(playlistId: string, trackId: string, trackData: { title: string; artist: string; album: string }) {
+  const addTrackToPlaylist = async (playlistId: string, track: Track) => {
     try {
       const playlist = playlists.find(p => p.id === playlistId);
-      if (!playlist) return;
-      
-      const updatedPlaylist = {
+      if (!playlist) throw new Error('Playlist not found');
+
+      const updatedPlaylist: PlaylistLocal = {
         ...playlist,
-        trackIds: [...playlist.trackIds, trackId],
+        trackIds: [...playlist.trackIds, track.id],
         updatedAt: Date.now(),
       };
-      
+
       await db.addPlaylist(updatedPlaylist);
       setPlaylists(prev => prev.map(p => p.id === playlistId ? updatedPlaylist : p));
-      
-      if (actor && identity) {
+
+      // Sync to cloud only if not in offline-only mode and authenticated
+      if (!offlineOnly && actor && identity) {
         try {
-          const track: Track = {
-            id: trackId,
-            title: trackData.title,
-            artist: trackData.artist,
-            album: trackData.album,
-          };
           await actor.addTrackToPlaylist(playlist.name, track);
         } catch (error) {
-          console.warn('Could not sync track to cloud playlist:', error);
+          console.error('Cloud sync failed (add track):', error);
         }
       }
-      
-      toast.success('Added to playlist');
     } catch (error) {
       console.error('Failed to add track to playlist:', error);
-      toast.error('Failed to add to playlist');
+      throw error;
     }
-  }
+  };
+
+  const removeTrackFromPlaylist = async (playlistId: string, trackId: string) => {
+    try {
+      const playlist = playlists.find(p => p.id === playlistId);
+      if (!playlist) throw new Error('Playlist not found');
+
+      const updatedPlaylist: PlaylistLocal = {
+        ...playlist,
+        trackIds: playlist.trackIds.filter(id => id !== trackId),
+        updatedAt: Date.now(),
+      };
+
+      await db.addPlaylist(updatedPlaylist);
+      setPlaylists(prev => prev.map(p => p.id === playlistId ? updatedPlaylist : p));
+
+      // Sync to cloud only if not in offline-only mode and authenticated
+      if (!offlineOnly && actor && identity) {
+        try {
+          await actor.removeTrackFromPlaylist(playlist.name, trackId);
+        } catch (error) {
+          console.error('Cloud sync failed (remove track):', error);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to remove track from playlist:', error);
+      throw error;
+    }
+  };
 
   return {
     playlists,
     createPlaylist,
     deletePlaylist,
     addTrackToPlaylist,
-    reloadPlaylists: loadPlaylists,
+    removeTrackFromPlaylist,
+    isLoading,
   };
 }

@@ -1,205 +1,65 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T17:41:38.863Z",
-  "summary": "Diff adds a new React app shell with bottom navigation, offline banner, theming provider, branding header using generated images, local media ingestion via file picker + IndexedDB metadata storage, search/sort utilities, favorites/history hooks with optional backend sync, and a partial Motoko backend with access control and user profile + playlist/favorites/history storage. Many requested playback, video UX, playlists UI, recommendations, sleep timer, gestures, virtualization, and documentation/assets cannot be fully verified from the visible diff (and many files are omitted/truncated).",
+  "generatedAt": "2026-02-17T18:34:54.916Z",
+  "summary": "Diff adds an IndexedDB-persisted Offline-only mode hook, guards several cloud-sync calls behind that flag, adds PWA manifest + service worker caching and SW registration, updates connectivity messaging banners, and applies a theme refresh via Tailwind/CSS token changes. However, Offline-only mode does not fully prevent Internet Identity hooks/flows from being instantiated, and the theme palette appears to introduce a purple accent which may violate the palette constraint.",
   "missing_requirements": [
     {
-      "id": "REQ-3",
-      "requirement": "Build Music Player core playback UX: play/pause, next/previous, seek, shuffle, repeat, and a persistent mini-player bar with full player view.",
-      "reason": "Although AppShell renders MiniPlayerBar and FullPlayerSheet, the diff summary contains no evidence of actual playback controls/queue management/shuffle-repeat/seek/time display implementation.",
+      "id": "REQ-1",
+      "requirement": "When Offline-only mode is ON, the UI does not render or trigger any Internet Identity sign-in/out UI or flows.",
+      "reason": "Even when offlineOnly is enabled, components still import and call the Internet Identity hook, which may trigger identity-related initialization/flows despite UI gating. The diff shows no global guard preventing useInternetIdentity from being invoked while Offline-only mode is ON.",
       "evidence": [
-        "frontend/src/app/layout/AppShell.tsx"
+        "frontend/src/features/auth/ProfileSetupDialog.tsx",
+        "frontend/src/pages/SettingsPage.tsx"
       ]
     },
     {
-      "id": "REQ-4",
-      "requirement": "Playlists management UI and persistence (create/rename/delete, add/remove tracks, play as queue) with local + backend sync.",
-      "reason": "Backend shows playlist creation/rename APIs (truncated), but there is no visible frontend playlist management UI or local playlist persistence/merge behavior in the shown files.",
+      "id": "REQ-1",
+      "requirement": "When Offline-only mode is ON, the app does not attempt any backend actor calls (including anonymous actor calls) for profiles, playlists, favorites, history, or export.",
+      "reason": "While several query/mutation paths are guarded with offlineOnly, the diff does not demonstrate a comprehensive app-wide enforcement (e.g., central actor-call prevention). Some features still create actor/identity dependencies and rely on per-call conditional logic; other potential actor-call sites are not evidenced as updated in this diff summary.",
       "evidence": [
-        "backend/main.mo",
-        "frontend/src/app/layout/AppShell.tsx"
+        "frontend/src/features/favorites/useFavorites.ts",
+        "frontend/src/features/history/useHistory.ts",
+        "frontend/src/features/playlists/usePlaylists.ts",
+        "frontend/src/hooks/useQueries.ts"
       ]
     },
     {
       "id": "REQ-5",
-      "requirement": "Favorites list UI, Recently Played and Recently Added sections, persisted locally + per-user backend sync when signed in.",
-      "reason": "Hooks exist for favorites/history syncing, but the diff summary does not show UI screens/sections for Favorites/Recently Played/Recently Added, nor any 'recently added' section implementation.",
+      "requirement": "The chosen palette avoids defaulting to a blue/purple theme unless already present in the current design tokens.",
+      "reason": "The updated global design tokens set primary/accent hues around 280 (purple), and the file summary explicitly describes a \"purple accent theme\", which conflicts with the requirement to avoid defaulting to a blue/purple theme.",
       "evidence": [
-        "frontend/src/features/favorites/useFavorites.ts",
-        "frontend/src/features/history/useHistory.ts",
-        "frontend/src/features/library/useLibrary.ts"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Equalizer using Web Audio API with presets and Off mode, applied to music playback only, settings persist.",
-      "reason": "UI persists an EQ preset in IndexedDB, but no Web Audio API filter chain or integration with the music playback pipeline is shown.",
-      "evidence": [
-        "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
-        "frontend/src/features/equalizer/presets.ts"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "requirement": "Video player with fullscreen, speed control (0.5x–2x), subtitle loading (.vtt) + toggle, and Picture-in-Picture.",
-      "reason": "VideoPage is referenced but no video player implementation is present in the visible diff summary.",
-      "evidence": [
-        "frontend/src/app/layout/AppShell.tsx"
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "requirement": "Mobile-friendly gesture controls for video (swipe volume + brightness overlay) and a settings toggle to disable gestures.",
-      "reason": "No gesture handling, brightness overlay, or settings toggle for gestures is shown in the diff summary.",
-      "evidence": [
-        "frontend/src/app/layout/AppShell.tsx"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "requirement": "Performance-minded UI patterns: smooth loading states for indexing, virtualization for long lists, fast tab switching/low jank.",
-      "reason": "A skeleton loading component exists, but there is no evidence of list virtualization for 1000+ items or other performance mechanisms beyond the skeleton.",
-      "evidence": [
-        "frontend/src/components/loading/IndexingSkeleton.tsx"
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "requirement": "Sleep timer that stops playback after a selected duration with countdown and cancel option.",
-      "reason": "No sleep timer logic or UI is shown in the diff summary.",
-      "evidence": [
-        "frontend/src/app/layout/AppShell.tsx"
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "requirement": "Smart recommendations (deterministic, on-device/history-based) with empty state guidance when no history exists.",
-      "reason": "No recommendation logic or UI section is shown in the diff summary.",
-      "evidence": [
-        "frontend/src/app/layout/AppShell.tsx"
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "requirement": "Auth + per-user cloud sync for playlists/favorites/history/settings using Internet Identity; merge/prompt for local vs cloud data.",
-      "reason": "A sign-in/out button exists and favorites/history attempt basic merge, but there is no visible merge/prompt flow for local vs cloud data and no evidence of playlists/settings sync/merge.",
-      "evidence": [
-        "frontend/src/features/auth/LoginButton.tsx",
-        "frontend/src/features/favorites/useFavorites.ts",
-        "frontend/src/features/history/useHistory.ts"
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "requirement": "Motoko backend per-user data model and APIs for playlists, likes, history, settings with stable upgrade-safe storage.",
-      "reason": "Backend defines maps and some playlist/profile APIs, but the visible file is truncated and shows no stable variables for upgrade safety and no explicit settings APIs in the shown portion.",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "requirement": "In-repo documentation deliverables (wireframe, folder overview, entry points, suggested libs, future ideas).",
-      "reason": "No documentation file is shown in the diff summary.",
-      "evidence": []
-    },
-    {
-      "id": "REQ-16",
-      "requirement": "Generated static image assets under frontend/public/assets/generated and used in UI.",
-      "reason": "UI references generated asset paths, but the diff summary does not show the actual image files being added under frontend/public/assets/generated (they may be in omitted files).",
-      "evidence": [
-        "frontend/src/components/branding/AppBrandHeader.tsx",
-        "frontend/src/features/library/EmptyLibraryState.tsx"
+        "frontend/src/index.css",
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "User profile creation/setup flow (name/email) stored in backend with ProfileSetupDialog.",
-      "reason": "BuildRequest does not ask for user profiles; it only requires Internet Identity auth and syncing playlists/favorites/history/settings.",
-      "evidence": [
-        "backend/main.mo",
-        "frontend/src/features/auth/ProfileSetupDialog.tsx",
-        "frontend/src/features/auth/useCurrentUserProfile.ts"
-      ]
-    },
-    {
-      "description": "Custom authorization/role permission system via AccessControl and MixinAuthorization.",
-      "reason": "BuildRequest only requires per-caller access enforcement; it does not request a separate admin/user permission framework.",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "description": "App branding/name/tagline content: 'Pulse Player' and 'Your music, your way'.",
-      "reason": "BuildRequest does not specify a product name or tagline; this is additional user-facing content not requested.",
-      "evidence": [
-        "frontend/src/components/branding/AppBrandHeader.tsx",
-        "frontend/src/features/auth/ProfileSetupDialog.tsx"
-      ]
-    }
-  ],
+  "hallucinated_features": [],
   "confidence": 0.62,
   "changed_files": [
-    "all_files_summary.json",
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/docs/pulse-player.md",
-    "frontend/index.css",
     "frontend/index.html",
+    "frontend/public/manifest.webmanifest",
+    "frontend/public/sw.js",
     "frontend/src/App.tsx",
     "frontend/src/app/layout/AppShell.tsx",
-    "frontend/src/app/offline/useOfflineStatus.ts",
+    "frontend/src/app/offline/offlineOnlyMode.ts",
+    "frontend/src/app/offline/useOfflineOnlyMode.ts",
     "frontend/src/components/branding/AppBrandHeader.tsx",
-    "frontend/src/components/loading/IndexingSkeleton.tsx",
     "frontend/src/components/navigation/BottomNav.tsx",
-    "frontend/src/features/auth/LoginButton.tsx",
     "frontend/src/features/auth/ProfileSetupDialog.tsx",
     "frontend/src/features/auth/useCurrentUserProfile.ts",
-    "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
-    "frontend/src/features/equalizer/presets.ts",
     "frontend/src/features/favorites/useFavorites.ts",
     "frontend/src/features/history/useHistory.ts",
-    "frontend/src/features/library/AddLocalMediaButton.tsx",
-    "frontend/src/features/library/EmptyLibraryState.tsx",
-    "frontend/src/features/library/LibrarySearchSortBar.tsx",
-    "frontend/src/features/library/LocalMediaNotice.tsx",
-    "frontend/src/features/library/searchSort.ts",
-    "frontend/src/features/library/useLibrary.ts",
-    "frontend/src/features/player/FullPlayerSheet.tsx",
-    "frontend/src/features/player/MiniPlayerBar.tsx",
-    "frontend/src/features/player/PlayerProvider.tsx",
-    "frontend/src/features/player/audio/AudioEngine.ts",
     "frontend/src/features/playlists/AddToPlaylistMenu.tsx",
-    "frontend/src/features/playlists/PlaylistDetail.tsx",
-    "frontend/src/features/playlists/PlaylistsPanel.tsx",
     "frontend/src/features/playlists/usePlaylists.ts",
-    "frontend/src/features/recommendations/EmptyRecommendationsState.tsx",
-    "frontend/src/features/recommendations/RecommendationsSection.tsx",
-    "frontend/src/features/recommendations/recommendationLogic.ts",
-    "frontend/src/features/recommendations/useRecommendations.ts",
-    "frontend/src/features/settings/PlaybackSettingsCard.tsx",
-    "frontend/src/features/settings/usePlayerSettings.ts",
-    "frontend/src/features/sleep-timer/SleepTimerControl.tsx",
-    "frontend/src/features/sleep-timer/useSleepTimer.ts",
     "frontend/src/features/tracks/TrackActions.tsx",
-    "frontend/src/features/tracks/TrackList.tsx",
-    "frontend/src/features/video/EmptyVideoState.tsx",
-    "frontend/src/features/video/VideoPlayerView.tsx",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
     "frontend/src/hooks/useQueries.ts",
     "frontend/src/index.css",
-    "frontend/src/lib/media-utils.ts",
-    "frontend/src/lib/media/metadata.ts",
-    "frontend/src/lib/storage/indexedDb.ts",
-    "frontend/src/main.tsx",
     "frontend/src/pages/LibraryPage.tsx",
     "frontend/src/pages/MusicPage.tsx",
     "frontend/src/pages/SettingsPage.tsx",
     "frontend/src/pages/VideoPage.tsx",
-    "frontend/src/utils/urlParams.ts",
     "frontend/tailwind.config.js",
     "project_state.json"
   ]

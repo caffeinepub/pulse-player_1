@@ -1,0 +1,10 @@
+{
+  "frontend/src/features/player/MiniPlayerBar.tsx": "Persistent mini player bar component that displays current track info and basic playback controls, expandable to full player view.",
+  "frontend/src/features/tracks/TrackList.tsx": "Reusable track list component that displays audio tracks with play functionality, duration, and action buttons.",
+  "frontend/src/pages/VideoPage.tsx": "Video library page that displays all video files and opens the video player view when a video is selected.",
+  "frontend/src/features/auth/ProfileSetupDialog.tsx": "Profile setup dialog that prompts new users to enter their name on first login, with close button hidden via CSS selector.",
+  "frontend/src/lib/storage/indexedDb.ts": "IndexedDB wrapper using native browser APIs for local persistence of tracks, playlists, favorites, history, and settings without external dependencies.",
+  "frontend/src/pages/MusicPage.tsx": "Music tab page displaying recommendations, playlists, recently played tracks, and favorites with proper type filtering for undefined values.",
+  "frontend/src/features/playlists/PlaylistDetail.tsx": "Playlist detail view showing tracks in a playlist with play all and delete functionality, properly filtering out undefined tracks.",
+  "frontend/package.json": "Frontend package configuration with all required dependencies, removing the idb package that was causing import errors."
+}

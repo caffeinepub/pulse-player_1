@@ -1,0 +1,339 @@
+{
+  "kind": "build_request",
+  "title": "Minimal Music & Video Player (Responsive Web) with Local Media, Playlists, and Smooth UI",
+  "projectName": "Pulse Player",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a modern, clean, minimal responsive UI shell for a Music & Video Player with consistent design system: light + dark themes, soft neutral palette (avoid blue/purple), rounded corners, large clear icons, readable typography, smooth transitions, and a bottom navigation layout optimized for mobile screens.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create a modern, clean, and minimal Music & Video Player mobile application... Clean and minimal interface... Soft color palette (dark mode + light mode support)... Rounded corners and smooth animations... Bottom navigation bar... Large, clear icons... Easy-to-read typography... No cluttered layout"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App has a bottom navigation with at least: Music, Video, Library, Settings tabs (labels/icons visible and accessible).",
+        "User can toggle light/dark mode; theme applies across all pages/components.",
+        "UI uses rounded surfaces, spacing, and a consistent typography scale; no dense/cluttered layouts on a phone viewport (~390px wide).",
+        "Navigation and key controls have smooth, non-jarring animations (e.g., transitions for drawer/sheets/modals, hover/press states)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement local media ingestion for audio and video via browser-safe mechanisms: allow user to add/select local files (file picker) and index them in an app library; persist library metadata locally for offline availability (metadata and user lists), without requiring uploads to the backend.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Offline music support (local storage access)",
+          "Play local videos"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can add audio and video files using a file picker; the app extracts and stores basic metadata (filename, size, type, added date; and best-effort tags for audio).",
+        "Library persists across reloads (using local persistence such as IndexedDB); clearing site data resets it.",
+        "App clearly indicates that media files are stored/played locally and are not uploaded to the Internet Computer canister.",
+        "App works when offline for previously indexed media metadata and playlists; UI does not crash when network is unavailable."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Build Music Player core playback UX: play/pause, next/previous, seek, shuffle, repeat (off/one/all), and a persistent mini-player bar that remains available while navigating between tabs.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Play, pause, next, previous controls",
+          "Shuffle and repeat modes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Music playback controls work for a selected track: play/pause toggles, seek bar updates, duration/current time displayed.",
+        "Next/previous works within the current queue (playlist, search results, or library list).",
+        "Shuffle toggles randomized order; repeat cycles between off/one/all and behaves accordingly.",
+        "Mini-player persists across tabs and opens a full player view on tap/click."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add playlists management: create, rename, delete playlists; add/remove tracks; play a playlist as a queue; store playlist definitions persistently.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create and manage playlists"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can create a playlist with a name, view its tracks, rename it, and delete it.",
+        "User can add tracks to playlists from library/search views and remove them from the playlist detail view.",
+        "Playlists persist across sessions.",
+        "If signed in, playlists sync to backend for the user; if not signed in, playlists still work locally."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement Favorites/Like and history tracking: like/unlike tracks, show a Favorites list, track Recently Played and Recently Added sections, and persist this data (local + per-user backend when signed in).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Recently played section",
+          "Favorite/Like songs option",
+          "Recently added media section"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can like/unlike a track; Favorites view shows liked tracks.",
+        "Recently Played updates when a track starts playing and shows the most recent items in order.",
+        "Recently Added lists the most recently indexed media items (audio/video) by added date.",
+        "When signed in, favorites and history sync to backend; when signed out, features still work locally."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add library search and sorting: search by song name/artist/album (best-effort based on available metadata), and sorting by name, size, and date for both audio and video lists.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Search songs by name, artist, album",
+          "File sorting (by size, name, date)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Search filters library lists in real time and supports matching by filename and any available tags (title/artist/album).",
+        "Sorting can be switched among name/size/date and visibly affects ordering.",
+        "Search + sort are usable on small screens and accessible via keyboard."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement an equalizer using the Web Audio API with preset modes (e.g., Bass Boost, Pop, Rock, Classical, Jazz) and an Off mode; apply EQ to music playback only.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Equalizer with preset modes (Bass Boost, Pop, Rock, etc.)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Equalizer has a presets UI and an Off toggle.",
+        "Selecting a preset changes audio output perceptibly (via filter configuration) without breaking playback.",
+        "EQ settings persist across sessions."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Build Video Player with local video playback, fullscreen mode, playback speed control (0.5x–2x), subtitle loading (e.g., .vtt), and Picture-in-Picture where supported by the browser.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Play local videos",
+          "Fullscreen mode",
+          "Playback speed control (0.5x – 2x)",
+          "Subtitles support",
+          "Picture-in-Picture mode"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can play a selected local video with standard controls and a dedicated player view.",
+        "Fullscreen toggle works; exiting fullscreen returns to prior layout.",
+        "Playback speed can be set from 0.5x to 2x and is reflected in UI.",
+        "User can load a subtitle file (WebVTT) and toggle subtitles on/off.",
+        "PiP button appears when supported; entering/exiting PiP works without crashing."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add mobile-friendly gesture controls for video playback: swipe gestures to adjust volume and brightness-like overlay (UI-level brightness simulation), with clear visual feedback and a way to disable gestures in settings.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Gesture controls (swipe for brightness & volume)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Swiping on the video surface adjusts volume and shows an on-screen indicator.",
+        "Swiping for brightness changes an overlay opacity (visual brightness simulation) and shows an on-screen indicator.",
+        "A Settings toggle enables/disables gesture controls; default is enabled.",
+        "Gestures do not interfere with basic play/pause taps and scrubbing."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add smooth loading states and performance-minded UI patterns: skeletons/spinners for library indexing, virtualization for long lists, and ensure fast tab switching and low jank on mobile browsers.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Smooth loading animation",
+          "Lightweight and optimized performance"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Indexing local files shows a smooth loading state and does not freeze the UI.",
+        "Long lists (1000+ items) remain scrollable and responsive (use list virtualization).",
+        "Tab switches and opening player views do not trigger noticeable layout thrashing or large re-renders."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Implement a sleep timer that stops playback after a user-selected duration (e.g., 5/10/15/30/60 minutes) with countdown display and cancel option.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Sleep timer"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can start a sleep timer from the player or settings.",
+        "Countdown is visible and updates; user can cancel the timer.",
+        "When the timer expires, playback stops and UI reflects paused state."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Provide basic \"smart recommendations\" without external AI/LLM services: generate recommendations from on-device/user history (recently played, favorites, most played, similar artist/album when metadata exists).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Smart recommendations (AI-based based on user history)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Recommendations section exists (e.g., on Music tab) and populates after some listening activity.",
+        "Logic is explainable and deterministic (history-based heuristics), not dependent on external AI APIs.",
+        "Recommendations update as history changes; when no history exists, show an empty state with guidance."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Add authentication and per-user cloud sync for lightweight data only (playlists, favorites, history, settings) using Internet Identity; keep media files local-only.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Responsive for Android and iOS"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can sign in/out with Internet Identity.",
+        "When signed in, playlists/favorites/history/settings are fetched from backend on load and saved on change.",
+        "When signed out, the app still functions using local persistence; signing in merges or prompts for how to handle local vs cloud data."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Implement a Motoko backend data model and APIs to store per-user: playlists, liked tracks (by stable local track identifier), playback history, and basic settings; include basic CRUD methods and query methods needed by the UI.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create and manage playlists",
+          "Recently played section",
+          "Favorite/Like songs option"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes update/query methods for playlists, likes, history, and settings keyed by caller principal.",
+        "Backend enforces that users can only access their own data.",
+        "Data is stable across canister upgrades using stable variables (no migration file unless actually required by upgrade changes)."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Create in-repo documentation deliverables: (1) app UI wireframe description (screens + key interactions), (2) folder structure overview (frontend/backend), (3) basic starter code entry points explanation, (4) list of suggested libraries used (React Query, media helpers, etc.), and (5) future improvement ideas.",
+      "target": "unknown",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Generate: App UI wireframe description Folder structure Basic starter code Suggested libraries/plugins Future improvement ideas"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A single documentation file (or a small set under a docs/ directory) includes all requested sections in English.",
+        "Wireframe description covers at least: Music tab, Video tab, Library tab, Player views, Playlist flows, Settings.",
+        "Future improvements include items that are feasible for web/IC context (no native-only assumptions without noting limitations)."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Add generated static image assets for branding and empty states and render them in the UI from frontend/public/assets/generated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Make the app feel modern like Spotify but simpler."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are present under frontend/public/assets/generated and are used in the app (e.g., app header/landing and empty library/recommendations states).",
+        "Images are loaded directly as static assets (not fetched through the backend)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Must use the pre-injected React + TypeScript frontend and Motoko single-actor backend template (no Flutter/React Native).",
+    "Do not modify files under frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui; compose them instead.",
+    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo if an upgrade requires state migration.",
+    "No external databases or non-IC backend services.",
+    "No third-party auth providers; only Internet Identity for sign-in.",
+    "User-facing text must be English."
+  ],
+  "nonGoals": [
+    "Implement true native mobile background playback, lock screen controls, or OS-level media session integrations beyond what is available in standard browsers.",
+    "Guaranteed playback for MKV/AVI in all browsers (web playback depends on codec support); the app should handle unsupported formats gracefully rather than promising full coverage.",
+    "Integrating external AI/LLM services for recommendations.",
+    "Uploading/storing full media files in the Motoko canister."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimal geometric app logo mark, monochrome, rounded style (app-logo.dim_512x512.png)",
+      "Soft abstract gradient background, neutral palette, light and dark variants (hero-bg-light.dim_1440x900.png)",
+      "Soft abstract gradient background, neutral palette, light and dark variants (hero-bg-dark.dim_1440x900.png)",
+      "Minimal empty-state illustration of headphones and a play button, outline style (empty-library.dim_1200x800.png)",
+      "Minimal empty-state illustration of a film strip and play button, outline style (empty-video.dim_1200x800.png)"
+    ],
+    "edits": []
+  }
+}

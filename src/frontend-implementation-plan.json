@@ -1,0 +1,654 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Pulse Player — Responsive Local Music & Video Player (Frontend)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Build a modern responsive UI shell with light/dark themes, neutral palette, rounded UI, smooth transitions, and bottom navigation.",
+      "acceptanceCriteria": [
+        "App has a bottom navigation with at least: Music, Video, Library, Settings tabs (labels/icons visible and accessible).",
+        "User can toggle light/dark mode; theme applies across all pages/components.",
+        "UI uses rounded surfaces, spacing, and a consistent typography scale; no dense/cluttered layouts on a phone viewport (~390px wide).",
+        "Navigation and key controls have smooth, non-jarring animations (e.g., transitions for drawer/sheets/modals, hover/press states)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global styling with a soft neutral palette (avoid blue/purple), CSS variables for light/dark theme, typography scale, rounded corner defaults, and transition tokens (respect prefers-reduced-motion)."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions (colors/radius/animations) to align with the neutral palette and rounded, minimal design."
+        },
+        {
+          "path": "frontend/src/app/ThemeProvider.tsx",
+          "operation": "create",
+          "description": "Add a ThemeProvider that toggles light/dark mode by applying a root class and persisting the preference locally."
+        },
+        {
+          "path": "frontend/src/app/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create the responsive app shell with a bottom navigation layout optimized for mobile, safe-area padding, and a content area that accommodates a persistent mini-player."
+        },
+        {
+          "path": "frontend/src/components/navigation/BottomNav.tsx",
+          "operation": "create",
+          "description": "Implement an accessible bottom navigation (Music/Video/Library/Settings) with large icons + labels, active states, and smooth transitions."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Add the top-level app composition wiring ThemeProvider + AppShell + tab navigation, ensuring pages are reachable and transitions are smooth."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "create",
+          "description": "Create the Music tab page scaffold (sections for recommendations, favorites entry points, and recently played/added) that matches the design system."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "create",
+          "description": "Create the Video tab page scaffold (video library list and entry to video player view) consistent with the design system."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "create",
+          "description": "Create the Library tab page scaffold (audio + video lists, add files CTA, search/sort controls) consistent with the design system."
+        },
+        {
+          "path": "frontend/src/pages/SettingsPage.tsx",
+          "operation": "create",
+          "description": "Create the Settings tab page scaffold (theme toggle, gesture toggle, equalizer presets, sleep timer entry point, auth/sync controls)."
+        },
+        {
+          "path": "frontend/src/components/ui-kit/ShadcnSurface.tsx",
+          "operation": "create",
+          "description": "Add small wrapper components around existing shadcn/ui primitives (e.g., Card-like surfaces) to enforce consistent rounded corners/spacing without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Support local audio/video file picking, metadata indexing, and offline persistence of library metadata and user lists without uploads.",
+      "acceptanceCriteria": [
+        "User can add audio and video files using a file picker; the app extracts and stores basic metadata (filename, size, type, added date; and best-effort tags for audio).",
+        "Library persists across reloads (using local persistence such as IndexedDB); clearing site data resets it.",
+        "App clearly indicates that media files are stored/played locally and are not uploaded to the Internet Computer canister.",
+        "App works when offline for previously indexed media metadata and playlists; UI does not crash when network is unavailable."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/storage/indexedDb.ts",
+          "operation": "create",
+          "description": "Implement an IndexedDB helper for persisting library metadata, playlists, favorites, history, EQ settings, and UI settings locally."
+        },
+        {
+          "path": "frontend/src/lib/media/metadata.ts",
+          "operation": "create",
+          "description": "Add best-effort metadata extraction helpers for selected media files (filename/size/type/added date; attempt audio tags when feasible in-browser)."
+        },
+        {
+          "path": "frontend/src/features/library/useLibrary.ts",
+          "operation": "create",
+          "description": "Create a library hook that ingests file picker selections, indexes metadata, persists to IndexedDB, and exposes loading/progress state for UI."
+        },
+        {
+          "path": "frontend/src/features/library/LocalMediaNotice.tsx",
+          "operation": "create",
+          "description": "Add a clear UI notice stating that media files are kept/played locally and are not uploaded to the canister (include offline-friendly messaging)."
+        },
+        {
+          "path": "frontend/src/features/library/AddLocalMediaButton.tsx",
+          "operation": "create",
+          "description": "Create an Add Media CTA that opens a browser-safe file picker for audio/video selection and hands files to the library ingestion flow."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Wire the AddLocalMediaButton, LocalMediaNotice, and library indexing/loading states into the Library tab UI."
+        },
+        {
+          "path": "frontend/src/app/offline/useOfflineStatus.ts",
+          "operation": "create",
+          "description": "Add a small hook for detecting offline/online state and exposing a non-blocking banner/toast signal for the UI."
+        },
+        {
+          "path": "frontend/src/app/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Add an offline indicator area (non-blocking) and ensure the app shell remains stable if network is unavailable."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement music playback UX with queue controls, shuffle/repeat, seeking, and a persistent mini-player that opens a full player view.",
+      "acceptanceCriteria": [
+        "Music playback controls work for a selected track: play/pause toggles, seek bar updates, duration/current time displayed.",
+        "Next/previous works within the current queue (playlist, search results, or library list).",
+        "Shuffle toggles randomized order; repeat cycles between off/one/all and behaves accordingly.",
+        "Mini-player persists across tabs and opens a full player view on tap/click."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/player/audio/AudioEngine.ts",
+          "operation": "create",
+          "description": "Create an audio playback engine around HTMLAudioElement that supports play/pause, seek, time updates, queue navigation, shuffle, and repeat modes."
+        },
+        {
+          "path": "frontend/src/features/player/PlayerProvider.tsx",
+          "operation": "create",
+          "description": "Add a PlayerProvider (React context) to hold current track, queue, playback state, and expose actions used across tabs."
+        },
+        {
+          "path": "frontend/src/features/player/MiniPlayerBar.tsx",
+          "operation": "create",
+          "description": "Implement a persistent mini-player bar with track info and quick controls; tapping opens the full player view with smooth transitions."
+        },
+        {
+          "path": "frontend/src/features/player/FullPlayerSheet.tsx",
+          "operation": "create",
+          "description": "Create a full player view (sheet/modal style) with seek bar, time/duration, shuffle/repeat controls, and next/previous. Use shadcn-ui sheet/dialog primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/app/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Wire PlayerProvider and MiniPlayerBar into the shell so the mini-player persists across Music/Video/Library/Settings tabs."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "modify",
+          "description": "Wire track selection actions from music lists/sections to set the queue and start playback via PlayerProvider."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Enable starting music playback from the library audio list and setting the appropriate queue context (library list / playlist context)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Provide playlist management (create/rename/delete, add/remove tracks, play playlist queue) with local persistence and optional signed-in sync.",
+      "acceptanceCriteria": [
+        "User can create a playlist with a name, view its tracks, rename it, and delete it.",
+        "User can add tracks to playlists from library/search views and remove them from the playlist detail view.",
+        "Playlists persist across sessions.",
+        "If signed in, playlists sync to backend for the user; if not signed in, playlists still work locally."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/playlists/types.ts",
+          "operation": "create",
+          "description": "Define playlist-related frontend types, including stable local track identifiers used across library and sync logic."
+        },
+        {
+          "path": "frontend/src/features/playlists/usePlaylists.ts",
+          "operation": "create",
+          "description": "Implement playlist CRUD and track membership management backed by IndexedDB; when authenticated, also read/write via the backend actor capabilities described in frontend/src/backend.d.ts (without storing media files)."
+        },
+        {
+          "path": "frontend/src/features/playlists/PlaylistsPanel.tsx",
+          "operation": "create",
+          "description": "Create playlist UI for listing playlists and initiating create/rename/delete actions. Use shadcn-ui dialog/input/button primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/playlists/PlaylistDetail.tsx",
+          "operation": "create",
+          "description": "Create playlist detail UI to view tracks, remove tracks, and play playlist as a queue through PlayerProvider (with an empty state when none)."
+        },
+        {
+          "path": "frontend/src/features/playlists/AddToPlaylistMenu.tsx",
+          "operation": "create",
+          "description": "Add an 'Add to playlist' action usable from library/search lists to attach tracks to a chosen playlist. Use shadcn-ui dropdown/menu primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Wire playlist actions into library lists (add to playlist, go to playlist detail, play playlist queue)."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "modify",
+          "description": "Expose playlists entry and playlist playback from the Music tab (e.g., 'Your Playlists' section)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add favorites (like/unlike) and history tracking (recently played/added) with local persistence and optional signed-in sync.",
+      "acceptanceCriteria": [
+        "User can like/unlike a track; Favorites view shows liked tracks.",
+        "Recently Played updates when a track starts playing and shows the most recent items in order.",
+        "Recently Added lists the most recently indexed media items (audio/video) by added date.",
+        "When signed in, favorites and history sync to backend; when signed out, features still work locally."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/favorites/useFavorites.ts",
+          "operation": "create",
+          "description": "Implement like/unlike behavior backed by IndexedDB; when authenticated, sync likes via the backend actor capability (toggleFavorite/getFavorites) and reconcile with local state."
+        },
+        {
+          "path": "frontend/src/features/history/useHistory.ts",
+          "operation": "create",
+          "description": "Implement playback history tracking backed by IndexedDB; when authenticated, sync history via the backend actor capability (addToHistory/getHistory/clearHistory)."
+        },
+        {
+          "path": "frontend/src/features/library/useRecentlyAdded.ts",
+          "operation": "create",
+          "description": "Create a helper hook to compute 'Recently Added' from locally indexed media metadata (audio + video) sorted by added date."
+        },
+        {
+          "path": "frontend/src/features/tracks/TrackActions.tsx",
+          "operation": "create",
+          "description": "Create a reusable actions cluster (like button, add to playlist, etc.) for track rows/cards with accessible labeling and smooth press states."
+        },
+        {
+          "path": "frontend/src/features/player/PlayerProvider.tsx",
+          "operation": "modify",
+          "description": "On track start, update Recently Played through useHistory; ensure it works offline and does not throw when actor/network is unavailable."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "modify",
+          "description": "Wire Favorites, Recently Played, and Recently Added sections into the Music tab using the favorites/history/recently-added hooks."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Show like/unlike actions in library audio lists and ensure Recently Added reflects newly indexed items."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add library search and sorting for audio and video using best-effort metadata (filename/tags) and accessible small-screen UI.",
+      "acceptanceCriteria": [
+        "Search filters library lists in real time and supports matching by filename and any available tags (title/artist/album).",
+        "Sorting can be switched among name/size/date and visibly affects ordering.",
+        "Search + sort are usable on small screens and accessible via keyboard."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/library/searchSort.ts",
+          "operation": "create",
+          "description": "Implement pure utilities for filtering (filename/title/artist/album best-effort) and sorting (name/size/date) for both audio and video library lists."
+        },
+        {
+          "path": "frontend/src/features/library/LibrarySearchSortBar.tsx",
+          "operation": "create",
+          "description": "Create an accessible search + sort UI bar suitable for mobile screens. Use shadcn-ui input/select/dropdown primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Wire LibrarySearchSortBar into the library and apply the search/sort utilities to audio and video lists with keyboard-accessible controls."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Implement an equalizer using Web Audio API with presets and Off mode; apply to music playback only and persist settings.",
+      "acceptanceCriteria": [
+        "Equalizer has a presets UI and an Off toggle.",
+        "Selecting a preset changes audio output perceptibly (via filter configuration) without breaking playback.",
+        "EQ settings persist across sessions."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/equalizer/presets.ts",
+          "operation": "create",
+          "description": "Define deterministic EQ presets (Bass Boost/Pop/Rock/Classical/Jazz) and Off mode in a single source of truth."
+        },
+        {
+          "path": "frontend/src/features/equalizer/EqualizerEngine.ts",
+          "operation": "create",
+          "description": "Implement Web Audio graph setup to apply preset filters to the music audio element only, with safe fallback when Web Audio is unavailable."
+        },
+        {
+          "path": "frontend/src/features/equalizer/useEqualizer.ts",
+          "operation": "create",
+          "description": "Create a hook to control EQ preset/off state, persist it to IndexedDB, and bind it to the PlayerProvider/AudioEngine lifecycle."
+        },
+        {
+          "path": "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
+          "operation": "create",
+          "description": "Build the EQ presets UI and Off toggle for Settings (mobile-friendly, accessible). Use shadcn-ui controls without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/player/audio/AudioEngine.ts",
+          "operation": "modify",
+          "description": "Integrate EqualizerEngine so EQ can be enabled/disabled and updated without breaking playback; ensure EQ is applied only for music playback."
+        },
+        {
+          "path": "frontend/src/pages/SettingsPage.tsx",
+          "operation": "modify",
+          "description": "Wire EqualizerSettingsCard into Settings and ensure current preset persists across reloads."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Implement a local video player view with fullscreen, playback speed control, subtitle loading (.vtt), and Picture-in-Picture where supported.",
+      "acceptanceCriteria": [
+        "User can play a selected local video with standard controls and a dedicated player view.",
+        "Fullscreen toggle works; exiting fullscreen returns to prior layout.",
+        "Playback speed can be set from 0.5x to 2x and is reflected in UI.",
+        "User can load a subtitle file (WebVTT) and toggle subtitles on/off.",
+        "PiP button appears when supported; entering/exiting PiP works without crashing."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/video/VideoPlayerView.tsx",
+          "operation": "create",
+          "description": "Create a dedicated video player view using the HTMLVideoElement with custom UI for fullscreen, speed, subtitles, and PiP (when supported) and graceful handling of unsupported formats."
+        },
+        {
+          "path": "frontend/src/features/video/useVideoSubtitles.ts",
+          "operation": "create",
+          "description": "Implement subtitle loading from local .vtt file selection (create object URL), attach/detach tracks, and toggle subtitles on/off."
+        },
+        {
+          "path": "frontend/src/features/video/usePictureInPicture.ts",
+          "operation": "create",
+          "description": "Add a small helper hook to detect PiP availability and safely request/exit PiP without crashing."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "modify",
+          "description": "Wire selection of a local video from the library list into opening VideoPlayerView (in-place route/panel/sheet) and keep navigation consistent."
+        },
+        {
+          "path": "frontend/src/app/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Ensure the video player view can be opened/closed cleanly without breaking bottom navigation and without hiding the persistent mini-player for music."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Add mobile-friendly swipe gestures for video volume and brightness overlay with visual indicators and a settings toggle to disable.",
+      "acceptanceCriteria": [
+        "Swiping on the video surface adjusts volume and shows an on-screen indicator.",
+        "Swiping for brightness changes an overlay opacity (visual brightness simulation) and shows an on-screen indicator.",
+        "A Settings toggle enables/disables gesture controls; default is enabled.",
+        "Gestures do not interfere with basic play/pause taps and scrubbing."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/settings/usePlayerSettings.ts",
+          "operation": "create",
+          "description": "Implement persisted settings (IndexedDB) for gesture enable/disable and other player preferences needed by the UI."
+        },
+        {
+          "path": "frontend/src/features/video/useVideoGestures.ts",
+          "operation": "create",
+          "description": "Create touch gesture handling for the video surface: vertical swipes for volume and brightness overlay simulation, with clear on-screen feedback and conflict avoidance with taps/scrubbing."
+        },
+        {
+          "path": "frontend/src/features/video/VideoGestureOverlay.tsx",
+          "operation": "create",
+          "description": "Add UI overlays for volume/brightness indicators and brightness simulation layer, styled consistently with the app."
+        },
+        {
+          "path": "frontend/src/features/video/VideoPlayerView.tsx",
+          "operation": "modify",
+          "description": "Wire gesture handling and overlays into the video player view, gated by the persisted settings toggle."
+        },
+        {
+          "path": "frontend/src/features/settings/PlaybackSettingsCard.tsx",
+          "operation": "create",
+          "description": "Create a Settings card with a default-enabled toggle to enable/disable video gestures. Use shadcn-ui switch/label primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/SettingsPage.tsx",
+          "operation": "modify",
+          "description": "Wire PlaybackSettingsCard into Settings and ensure the gesture toggle persists across sessions."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add smooth loading states (indexing skeletons/spinners), list virtualization for large libraries, and reduce jank for fast tab switching.",
+      "acceptanceCriteria": [
+        "Indexing local files shows a smooth loading state and does not freeze the UI.",
+        "Long lists (1000+ items) remain scrollable and responsive (use list virtualization).",
+        "Tab switches and opening player views do not trigger noticeable layout thrashing or large re-renders."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/package.json",
+          "operation": "create",
+          "description": "Add required frontend dependencies for list virtualization and IndexedDB convenience as needed (e.g., a virtualization library)."
+        },
+        {
+          "path": "frontend/src/components/lists/VirtualizedMediaList.tsx",
+          "operation": "create",
+          "description": "Implement a reusable virtualized list component for audio/video library items and playlist tracks to keep large lists responsive."
+        },
+        {
+          "path": "frontend/src/components/loading/IndexingSkeleton.tsx",
+          "operation": "create",
+          "description": "Create skeleton/spinner loading UI for library indexing and other async states using shadcn-ui Skeleton (without modifying frontend/src/components/ui). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Use IndexingSkeleton during ingestion/indexing and render audio/video lists via VirtualizedMediaList when item counts are large."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "modify",
+          "description": "Use lightweight memoized sections and virtualized lists (where applicable) to keep tab switching fast."
+        },
+        {
+          "path": "frontend/src/app/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Minimize remounts across tab switches (keep tab content mounted where appropriate) and ensure player overlays/sheets do not cause large reflows."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Implement a sleep timer to stop playback after a selected duration, show countdown, and allow cancel.",
+      "acceptanceCriteria": [
+        "User can start a sleep timer from the player or settings.",
+        "Countdown is visible and updates; user can cancel the timer.",
+        "When the timer expires, playback stops and UI reflects paused state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/sleep-timer/useSleepTimer.ts",
+          "operation": "create",
+          "description": "Implement sleep timer state with countdown, cancel, persistence of the last selected duration, and integration with PlayerProvider to stop playback on expiry."
+        },
+        {
+          "path": "frontend/src/features/sleep-timer/SleepTimerControl.tsx",
+          "operation": "create",
+          "description": "Add a UI control for selecting durations (5/10/15/30/60) with countdown display and cancel. Use shadcn-ui popover/dialog/select primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/player/FullPlayerSheet.tsx",
+          "operation": "modify",
+          "description": "Expose SleepTimerControl in the full player view so users can start/cancel the timer while listening."
+        },
+        {
+          "path": "frontend/src/pages/SettingsPage.tsx",
+          "operation": "modify",
+          "description": "Expose SleepTimerControl in Settings as an alternate entry point."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Add deterministic on-device recommendations based on user activity (history/favorites/most played/similar metadata) with empty state guidance.",
+      "acceptanceCriteria": [
+        "Recommendations section exists (e.g., on Music tab) and populates after some listening activity.",
+        "Logic is explainable and deterministic (history-based heuristics), not dependent on external AI APIs.",
+        "Recommendations update as history changes; when no history exists, show an empty state with guidance."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/recommendations/recommendationLogic.ts",
+          "operation": "create",
+          "description": "Implement deterministic heuristic scoring for recommendations using local favorites, history, most played, and similar artist/album when available."
+        },
+        {
+          "path": "frontend/src/features/recommendations/useRecommendations.ts",
+          "operation": "create",
+          "description": "Create a hook that recomputes recommendations when local history/favorites/library metadata change, with a clear empty-state contract."
+        },
+        {
+          "path": "frontend/src/features/recommendations/RecommendationsSection.tsx",
+          "operation": "create",
+          "description": "Build a Music-tab recommendations section with explainable labels (e.g., 'Because you played…') and an empty state with guidance."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "modify",
+          "description": "Wire RecommendationsSection into the Music tab and ensure it updates as user activity changes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Add Internet Identity authentication UI and per-user cloud sync for playlists/favorites/history/settings while keeping media files local-only.",
+      "acceptanceCriteria": [
+        "User can sign in/out with Internet Identity.",
+        "When signed in, playlists/favorites/history/settings are fetched from backend on load and saved on change.",
+        "When signed out, the app still functions using local persistence; signing in merges or prompts for how to handle local vs cloud data."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create a sign in/out button using the existing Internet Identity hook; when logging out, clear relevant cached app queries/state to avoid leaking user data. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/auth/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to load the caller profile via the backend actor when authenticated, following the authorization component guidance to avoid modal flash. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/auth/ProfileSetupDialog.tsx",
+          "operation": "create",
+          "description": "Prompt for a user name on first login and save it via the backend actor capability; avoid showing principal ID. Use shadcn-ui dialog/input without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/sync/useCloudSync.ts",
+          "operation": "create",
+          "description": "Implement a sync orchestrator: when authenticated, fetch cloud playlists/favorites/history/settings on load; on changes, push updates; when unauthenticated, operate purely from local IndexedDB."
+        },
+        {
+          "path": "frontend/src/features/sync/MergePromptDialog.tsx",
+          "operation": "create",
+          "description": "Provide a merge/prompt UI for handling local vs cloud data on sign-in (choose to merge/replace/keep local), without touching media files. Use shadcn-ui dialog primitives without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/SettingsPage.tsx",
+          "operation": "modify",
+          "description": "Wire authentication (LoginButton, profile setup) and sync status controls into Settings, including clear messaging that media files remain local-only."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire global auth/profile setup flows and initialize cloud sync orchestration after authentication state changes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Add in-repo documentation deliverables (wireframe, structure, entry points, suggested libraries, future improvements) in English.",
+      "acceptanceCriteria": [
+        "A single documentation file (or a small set under a docs/ directory) includes all requested sections in English.",
+        "Wireframe description covers at least: Music tab, Video tab, Library tab, Player views, Playlist flows, Settings.",
+        "Future improvements include items that are feasible for web/IC context (no native-only assumptions without noting limitations)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/docs/pulse-player.md",
+          "operation": "create",
+          "description": "Write documentation covering: UI wireframe (screens + key interactions), folder structure overview (frontend/backend), starter entry points explanation, suggested libraries used, and future improvement ideas (web/IC-feasible)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Add generated static branding/empty-state images and render them from frontend/public/assets/generated in the UI.",
+      "acceptanceCriteria": [
+        "Generated images are present under frontend/public/assets/generated and are used in the app (e.g., app header/landing and empty library/recommendations states).",
+        "Images are loaded directly as static assets (not fetched through the backend)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated app logo image asset at frontend/public/assets/generated/app-logo.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/hero-bg-light.dim_1440x900.png",
+          "operation": "create",
+          "description": "Add the generated light hero background image asset at frontend/public/assets/generated/hero-bg-light.dim_1440x900.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/hero-bg-dark.dim_1440x900.png",
+          "operation": "create",
+          "description": "Add the generated dark hero background image asset at frontend/public/assets/generated/hero-bg-dark.dim_1440x900.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/empty-library.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add the generated empty library illustration asset at frontend/public/assets/generated/empty-library.dim_1200x800.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/empty-video.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add the generated empty video illustration asset at frontend/public/assets/generated/empty-video.dim_1200x800.png."
+        },
+        {
+          "path": "frontend/src/components/branding/AppBrandHeader.tsx",
+          "operation": "create",
+          "description": "Create a small branding header component that renders frontend/public/assets/generated/app-logo.dim_512x512.png and uses the appropriate hero background image variant for the active theme."
+        },
+        {
+          "path": "frontend/src/features/library/EmptyLibraryState.tsx",
+          "operation": "create",
+          "description": "Create an empty state component that renders frontend/public/assets/generated/empty-library.dim_1200x800.png and provides English guidance to add local media."
+        },
+        {
+          "path": "frontend/src/features/video/EmptyVideoState.tsx",
+          "operation": "create",
+          "description": "Create an empty state component that renders frontend/public/assets/generated/empty-video.dim_1200x800.png and provides English guidance to add/select local videos."
+        },
+        {
+          "path": "frontend/src/features/recommendations/EmptyRecommendationsState.tsx",
+          "operation": "create",
+          "description": "Create an empty state for recommendations that uses frontend/public/assets/generated/empty-library.dim_1200x800.png (or a lightweight variant) and provides English guidance to play/like tracks to generate recommendations."
+        },
+        {
+          "path": "frontend/src/app/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Wire AppBrandHeader into the app shell (without adding new top-level routes) and ensure images load as static assets."
+        },
+        {
+          "path": "frontend/src/pages/LibraryPage.tsx",
+          "operation": "modify",
+          "description": "Use EmptyLibraryState when no media is indexed and ensure it references the generated static asset path."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "modify",
+          "description": "Use EmptyVideoState when no video media is indexed and ensure it references the generated static asset path."
+        },
+        {
+          "path": "frontend/src/features/recommendations/RecommendationsSection.tsx",
+          "operation": "modify",
+          "description": "Render EmptyRecommendationsState when no recommendation inputs exist and ensure it references the generated static asset path."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,486 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T17:41:38.870Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 16,
+    "implemented": 15,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Create a modern, clean, minimal responsive UI shell for a Music & Video Player with consistent design system: light + dark themes, soft neutral palette (avoid blue/purple), rounded corners, large clear icons, readable typography, smooth transitions, and a bottom navigation layout optimized for mobile screens.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/app/ThemeProvider.tsx",
+          "frontend/src/app/layout/AppShell.tsx",
+          "frontend/src/components/navigation/BottomNav.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/pages/VideoPage.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/SettingsPage.tsx",
+          "frontend/src/components/ui-kit/ShadcnSurface.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/app/layout/AppShell.tsx",
+          "frontend/src/components/navigation/BottomNav.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/pages/VideoPage.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/SettingsPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-10",
+        "summary": "Add smooth loading states and performance-minded UI patterns: skeletons/spinners for library indexing, virtualization for long lists, and ensure fast tab switching and low jank on mobile browsers.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/package.json",
+          "frontend/src/components/lists/VirtualizedMediaList.tsx",
+          "frontend/src/components/loading/IndexingSkeleton.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/app/layout/AppShell.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/loading/IndexingSkeleton.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/app/layout/AppShell.tsx"
+        ]
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Implement a sleep timer that stops playback after a user-selected duration (e.g., 5/10/15/30/60 minutes) with countdown display and cancel option.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/sleep-timer/useSleepTimer.ts",
+          "frontend/src/features/sleep-timer/SleepTimerControl.tsx",
+          "frontend/src/features/player/FullPlayerSheet.tsx",
+          "frontend/src/pages/SettingsPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/sleep-timer/useSleepTimer.ts",
+          "frontend/src/features/sleep-timer/SleepTimerControl.tsx",
+          "frontend/src/features/player/FullPlayerSheet.tsx",
+          "frontend/src/pages/SettingsPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-12",
+        "summary": "Provide basic \"smart recommendations\" without external AI/LLM services: generate recommendations from on-device/user history (recently played, favorites, most played, similar artist/album when metadata exists).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/recommendations/recommendationLogic.ts",
+          "frontend/src/features/recommendations/useRecommendations.ts",
+          "frontend/src/features/recommendations/RecommendationsSection.tsx",
+          "frontend/src/pages/MusicPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/recommendations/recommendationLogic.ts",
+          "frontend/src/features/recommendations/useRecommendations.ts",
+          "frontend/src/features/recommendations/RecommendationsSection.tsx",
+          "frontend/src/pages/MusicPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-13",
+        "summary": "Add authentication and per-user cloud sync for lightweight data only (playlists, favorites, history, settings) using Internet Identity; keep media files local-only.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/auth/LoginButton.tsx",
+          "frontend/src/features/auth/useCurrentUserProfile.ts",
+          "frontend/src/features/auth/ProfileSetupDialog.tsx",
+          "frontend/src/features/sync/useCloudSync.ts",
+          "frontend/src/features/sync/MergePromptDialog.tsx",
+          "frontend/src/pages/SettingsPage.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/auth/LoginButton.tsx",
+          "frontend/src/features/auth/useCurrentUserProfile.ts",
+          "frontend/src/features/auth/ProfileSetupDialog.tsx",
+          "frontend/src/pages/SettingsPage.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-14",
+        "summary": "Implement a Motoko backend data model and APIs to store per-user: playlists, liked tracks (by stable local track identifier), playback history, and basic settings; include basic CRUD methods and query methods needed by the UI.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-15",
+        "summary": "Create in-repo documentation deliverables: (1) app UI wireframe description (screens + key interactions), (2) folder structure overview (frontend/backend), (3) basic starter code entry points explanation, (4) list of suggested libraries used (React Query, media helpers, etc.), and (5) future improvement ideas.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/docs/pulse-player.md"
+        ],
+        "matchedFiles": [
+          "frontend/docs/pulse-player.md"
+        ]
+      },
+      {
+        "id": "REQ-16",
+        "summary": "Add generated static image assets for branding and empty states and render them in the UI from frontend/public/assets/generated.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "frontend/public/assets/generated/hero-bg-light.dim_1440x900.png",
+          "frontend/public/assets/generated/hero-bg-dark.dim_1440x900.png",
+          "frontend/public/assets/generated/empty-library.dim_1200x800.png",
+          "frontend/public/assets/generated/empty-video.dim_1200x800.png",
+          "frontend/src/components/branding/AppBrandHeader.tsx",
+          "frontend/src/features/library/EmptyLibraryState.tsx",
+          "frontend/src/features/video/EmptyVideoState.tsx",
+          "frontend/src/features/recommendations/EmptyRecommendationsState.tsx",
+          "frontend/src/app/layout/AppShell.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/VideoPage.tsx",
+          "frontend/src/features/recommendations/RecommendationsSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "frontend/public/assets/generated/hero-bg-light.dim_1440x900.png",
+          "frontend/public/assets/generated/hero-bg-dark.dim_1440x900.png",
+          "frontend/public/assets/generated/empty-library.dim_1200x800.png",
+          "frontend/public/assets/generated/empty-video.dim_1200x800.png",
+          "frontend/src/components/branding/AppBrandHeader.tsx",
+          "frontend/src/features/library/EmptyLibraryState.tsx",
+          "frontend/src/features/video/EmptyVideoState.tsx",
+          "frontend/src/features/recommendations/EmptyRecommendationsState.tsx",
+          "frontend/src/app/layout/AppShell.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/VideoPage.tsx",
+          "frontend/src/features/recommendations/RecommendationsSection.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Implement local media ingestion for audio and video via browser-safe mechanisms: allow user to add/select local files (file picker) and index them in an app library; persist library metadata locally for offline availability (metadata and user lists), without requiring uploads to the backend.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/lib/storage/indexedDb.ts",
+          "frontend/src/lib/media/metadata.ts",
+          "frontend/src/features/library/useLibrary.ts",
+          "frontend/src/features/library/LocalMediaNotice.tsx",
+          "frontend/src/features/library/AddLocalMediaButton.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/app/offline/useOfflineStatus.ts",
+          "frontend/src/app/layout/AppShell.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/lib/storage/indexedDb.ts",
+          "frontend/src/lib/media/metadata.ts",
+          "frontend/src/features/library/useLibrary.ts",
+          "frontend/src/features/library/LocalMediaNotice.tsx",
+          "frontend/src/features/library/AddLocalMediaButton.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/app/offline/useOfflineStatus.ts",
+          "frontend/src/app/layout/AppShell.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Build Music Player core playback UX: play/pause, next/previous, seek, shuffle, repeat (off/one/all), and a persistent mini-player bar that remains available while navigating between tabs.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/player/audio/AudioEngine.ts",
+          "frontend/src/features/player/PlayerProvider.tsx",
+          "frontend/src/features/player/MiniPlayerBar.tsx",
+          "frontend/src/features/player/FullPlayerSheet.tsx",
+          "frontend/src/app/layout/AppShell.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/pages/LibraryPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/player/audio/AudioEngine.ts",
+          "frontend/src/features/player/PlayerProvider.tsx",
+          "frontend/src/features/player/MiniPlayerBar.tsx",
+          "frontend/src/features/player/FullPlayerSheet.tsx",
+          "frontend/src/app/layout/AppShell.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/pages/LibraryPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Add playlists management: create, rename, delete playlists; add/remove tracks; play a playlist as a queue; store playlist definitions persistently.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/playlists/types.ts",
+          "frontend/src/features/playlists/usePlaylists.ts",
+          "frontend/src/features/playlists/PlaylistsPanel.tsx",
+          "frontend/src/features/playlists/PlaylistDetail.tsx",
+          "frontend/src/features/playlists/AddToPlaylistMenu.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/MusicPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/playlists/usePlaylists.ts",
+          "frontend/src/features/playlists/PlaylistsPanel.tsx",
+          "frontend/src/features/playlists/PlaylistDetail.tsx",
+          "frontend/src/features/playlists/AddToPlaylistMenu.tsx",
+          "frontend/src/pages/LibraryPage.tsx",
+          "frontend/src/pages/MusicPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Implement Favorites/Like and history tracking: like/unlike tracks, show a Favorites list, track Recently Played and Recently Added sections, and persist this data (local + per-user backend when signed in).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/favorites/useFavorites.ts",
+          "frontend/src/features/history/useHistory.ts",
+          "frontend/src/features/library/useRecentlyAdded.ts",
+          "frontend/src/features/tracks/TrackActions.tsx",
+          "frontend/src/features/player/PlayerProvider.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/pages/LibraryPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/favorites/useFavorites.ts",
+          "frontend/src/features/history/useHistory.ts",
+          "frontend/src/features/tracks/TrackActions.tsx",
+          "frontend/src/features/player/PlayerProvider.tsx",
+          "frontend/src/pages/MusicPage.tsx",
+          "frontend/src/pages/LibraryPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Add library search and sorting: search by song name/artist/album (best-effort based on available metadata), and sorting by name, size, and date for both audio and video lists.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/library/searchSort.ts",
+          "frontend/src/features/library/LibrarySearchSortBar.tsx",
+          "frontend/src/pages/LibraryPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/library/searchSort.ts",
+          "frontend/src/features/library/LibrarySearchSortBar.tsx",
+          "frontend/src/pages/LibraryPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Implement an equalizer using the Web Audio API with preset modes (e.g., Bass Boost, Pop, Rock, Classical, Jazz) and an Off mode; apply EQ to music playback only.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/equalizer/presets.ts",
+          "frontend/src/features/equalizer/EqualizerEngine.ts",
+          "frontend/src/features/equalizer/useEqualizer.ts",
+          "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
+          "frontend/src/features/player/audio/AudioEngine.ts",
+          "frontend/src/pages/SettingsPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/equalizer/presets.ts",
+          "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
+          "frontend/src/features/player/audio/AudioEngine.ts",
+          "frontend/src/pages/SettingsPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Build Video Player with local video playback, fullscreen mode, playback speed control (0.5x–2x), subtitle loading (e.g., .vtt), and Picture-in-Picture where supported by the browser.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/video/VideoPlayerView.tsx",
+          "frontend/src/features/video/useVideoSubtitles.ts",
+          "frontend/src/features/video/usePictureInPicture.ts",
+          "frontend/src/pages/VideoPage.tsx",
+          "frontend/src/app/layout/AppShell.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/video/VideoPlayerView.tsx",
+          "frontend/src/pages/VideoPage.tsx",
+          "frontend/src/app/layout/AppShell.tsx"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Add mobile-friendly gesture controls for video playback: swipe gestures to adjust volume and brightness-like overlay (UI-level brightness simulation), with clear visual feedback and a way to disable gestures in settings.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/features/settings/usePlayerSettings.ts",
+          "frontend/src/features/video/useVideoGestures.ts",
+          "frontend/src/features/video/VideoGestureOverlay.tsx",
+          "frontend/src/features/video/VideoPlayerView.tsx",
+          "frontend/src/features/settings/PlaybackSettingsCard.tsx",
+          "frontend/src/pages/SettingsPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/features/settings/usePlayerSettings.ts",
+          "frontend/src/features/video/VideoPlayerView.tsx",
+          "frontend/src/features/settings/PlaybackSettingsCard.tsx",
+          "frontend/src/pages/SettingsPage.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/authorization/MixinAuthorization.mo",
+    "backend/authorization/access-control.mo",
+    "backend/main.mo",
+    "build-request.json",
+    "build-template/Dockerfile",
+    "build-template/LICENSE",
+    "build-template/README.md",
+    "build-template/deploy.sh",
+    "build-template/icp.yaml",
+    "build-template/package.json",
+    "build-template/pnpm-lock.yaml",
+    "build-template/pnpm-workspace.yaml",
+    "build-template/scripts/prune-unused-images.js",
+    "build-template/scripts/resize-images.js",
+    "build-template/src/backend/canister.yaml",
+    "build-template/src/backend/system-idl/aaaaa-aa.did",
+    "build-template/src/frontend/canister.yaml",
+    "build-template/src/frontend/components.json",
+    "build-template/src/frontend/env.json",
+    "build-template/src/frontend/eslint-rules/no-bigint-in-query-keys.js",
+    "build-template/src/frontend/eslint-rules/require-internet-identity-provider.js",
+    "build-template/src/frontend/eslint.config.js",
+    "build-template/src/frontend/package.json",
+    "build-template/src/frontend/postcss.config.js",
+    "build-template/src/frontend/src/components/ui/accordion.tsx",
+    "build-template/src/frontend/src/components/ui/alert-dialog.tsx",
+    "build-template/src/frontend/src/components/ui/alert.tsx",
+    "build-template/src/frontend/src/components/ui/aspect-ratio.tsx",
+    "build-template/src/frontend/src/components/ui/avatar.tsx",
+    "build-template/src/frontend/src/components/ui/badge.tsx",
+    "build-template/src/frontend/src/components/ui/breadcrumb.tsx",
+    "build-template/src/frontend/src/components/ui/button.tsx",
+    "build-template/src/frontend/src/components/ui/calendar.tsx",
+    "build-template/src/frontend/src/components/ui/card.tsx",
+    "build-template/src/frontend/src/components/ui/carousel.tsx",
+    "build-template/src/frontend/src/components/ui/chart.tsx",
+    "build-template/src/frontend/src/components/ui/checkbox.tsx",
+    "build-template/src/frontend/src/components/ui/collapsible.tsx",
+    "build-template/src/frontend/src/components/ui/command.tsx",
+    "build-template/src/frontend/src/components/ui/context-menu.tsx",
+    "build-template/src/frontend/src/components/ui/dialog.tsx",
+    "build-template/src/frontend/src/components/ui/drawer.tsx",
+    "build-template/src/frontend/src/components/ui/dropdown-menu.tsx",
+    "build-template/src/frontend/src/components/ui/form.tsx",
+    "build-template/src/frontend/src/components/ui/hover-card.tsx",
+    "build-template/src/frontend/src/components/ui/input-otp.tsx",
+    "build-template/src/frontend/src/components/ui/input.tsx",
+    "build-template/src/frontend/src/components/ui/label.tsx",
+    "build-template/src/frontend/src/components/ui/menubar.tsx",
+    "build-template/src/frontend/src/components/ui/navigation-menu.tsx",
+    "build-template/src/frontend/src/components/ui/pagination.tsx",
+    "build-template/src/frontend/src/components/ui/popover.tsx",
+    "build-template/src/frontend/src/components/ui/progress.tsx",
+    "build-template/src/frontend/src/components/ui/radio-group.tsx",
+    "build-template/src/frontend/src/components/ui/resizable.tsx",
+    "build-template/src/frontend/src/components/ui/scroll-area.tsx",
+    "build-template/src/frontend/src/components/ui/select.tsx",
+    "build-template/src/frontend/src/components/ui/separator.tsx",
+    "build-template/src/frontend/src/components/ui/sheet.tsx",
+    "build-template/src/frontend/src/components/ui/sidebar.tsx",
+    "build-template/src/frontend/src/components/ui/skeleton.tsx",
+    "build-template/src/frontend/src/components/ui/slider.tsx",
+    "build-template/src/frontend/src/components/ui/sonner.tsx",
+    "build-template/src/frontend/src/components/ui/switch.tsx",
+    "build-template/src/frontend/src/components/ui/table.tsx",
+    "build-template/src/frontend/src/components/ui/tabs.tsx",
+    "build-template/src/frontend/src/components/ui/textarea.tsx",
+    "build-template/src/frontend/src/components/ui/toggle-group.tsx",
+    "build-template/src/frontend/src/components/ui/toggle.tsx",
+    "build-template/src/frontend/src/components/ui/tooltip.tsx",
+    "build-template/src/frontend/src/hooks/use-mobile.tsx",
+    "build-template/src/frontend/src/lib/utils.ts",
+    "build-template/src/frontend/tsconfig.json",
+    "build-template/src/frontend/vite.config.js",
+    "build-template/tsconfig.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/docs/pulse-player.md",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/public/assets/generated/app-logo.dim_512x512.png",
+    "frontend/public/assets/generated/empty-library.dim_1200x800.png",
+    "frontend/public/assets/generated/empty-video.dim_1200x800.png",
+    "frontend/public/assets/generated/hero-bg-dark.dim_1440x900.png",
+    "frontend/public/assets/generated/hero-bg-light.dim_1440x900.png",
+    "frontend/src/App.tsx",
+    "frontend/src/app/layout/AppShell.tsx",
+    "frontend/src/app/offline/useOfflineStatus.ts",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/branding/AppBrandHeader.tsx",
+    "frontend/src/components/loading/IndexingSkeleton.tsx",
+    "frontend/src/components/navigation/BottomNav.tsx",
+    "frontend/src/config.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/features/auth/LoginButton.tsx",
+    "frontend/src/features/auth/ProfileSetupDialog.tsx",
+    "frontend/src/features/auth/useCurrentUserProfile.ts",
+    "frontend/src/features/equalizer/EqualizerSettingsCard.tsx",
+    "frontend/src/features/equalizer/presets.ts",
+    "frontend/src/features/favorites/useFavorites.ts",
+    "frontend/src/features/history/useHistory.ts",
+    "frontend/src/features/library/AddLocalMediaButton.tsx",
+    "frontend/src/features/library/EmptyLibraryState.tsx",
+    "frontend/src/features/library/LibrarySearchSortBar.tsx",
+    "frontend/src/features/library/LocalMediaNotice.tsx",
+    "frontend/src/features/library/searchSort.ts",
+    "frontend/src/features/library/useLibrary.ts",
+    "frontend/src/features/player/FullPlayerSheet.tsx",
+    "frontend/src/features/player/MiniPlayerBar.tsx",
+    "frontend/src/features/player/PlayerProvider.tsx",
+    "frontend/src/features/player/audio/AudioEngine.ts",
+    "frontend/src/features/playlists/AddToPlaylistMenu.tsx",
+    "frontend/src/features/playlists/PlaylistDetail.tsx",
+    "frontend/src/features/playlists/PlaylistsPanel.tsx",
+    "frontend/src/features/playlists/usePlaylists.ts",
+    "frontend/src/features/recommendations/EmptyRecommendationsState.tsx",
+    "frontend/src/features/recommendations/RecommendationsSection.tsx",
+    "frontend/src/features/recommendations/recommendationLogic.ts",
+    "frontend/src/features/recommendations/useRecommendations.ts",
+    "frontend/src/features/settings/PlaybackSettingsCard.tsx",
+    "frontend/src/features/settings/usePlayerSettings.ts",
+    "frontend/src/features/sleep-timer/SleepTimerControl.tsx",
+    "frontend/src/features/sleep-timer/useSleepTimer.ts",
+    "frontend/src/features/tracks/TrackActions.tsx",
+    "frontend/src/features/tracks/TrackList.tsx",
+    "frontend/src/features/video/EmptyVideoState.tsx",
+    "frontend/src/features/video/VideoPlayerView.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/media-utils.ts",
+    "frontend/src/lib/media/metadata.ts",
+    "frontend/src/lib/storage/indexedDb.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/LibraryPage.tsx",
+    "frontend/src/pages/MusicPage.tsx",
+    "frontend/src/pages/SettingsPage.tsx",
+    "frontend/src/pages/VideoPage.tsx",
+    "frontend/src/ui-summary.json",
+    "frontend/src/utils/StorageClient.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}
